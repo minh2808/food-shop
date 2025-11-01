@@ -38,6 +38,8 @@ public class Product {
     
     private Double discountPrice;
 
+    private Integer stockQuantity;
+
 	
 	public int getDiscount() {
 		return discount;
@@ -55,7 +57,13 @@ public class Product {
 		this.discountPrice = discountPrice;
 	}
 
+    public Integer getStockQuantity(){
+        return this.stockQuantity;
+    }
 
+    public void setStockQuantity(Integer stockQuantity){
+        this.stockQuantity = stockQuantity;
+    }
 
 
 	public Integer getId() {
@@ -66,6 +74,7 @@ public class Product {
 		this.id = id;
 	}
 
+
 	public String getTitle() {
 		return title;
 	}
@@ -73,6 +82,7 @@ public class Product {
 	public void setTitle(String title) {
 		this.title = title;
 	}
+
 
 	public String getDescription() {
 		return description;
@@ -82,6 +92,7 @@ public class Product {
 		this.description = description;
 	}
 
+
 	public String getCategory() {
 		return category;
 	}
@@ -89,6 +100,7 @@ public class Product {
 	public void setCategory(String category) {
 		this.category = category;
 	}
+
 
 	public Double getPrice() {
 		return price;
@@ -98,6 +110,7 @@ public class Product {
 		this.price = price;
 	}
 
+
 	public String getImage() {
 		return image;
 	}
@@ -106,5 +119,5 @@ public class Product {
 		this.image = image;
 	}
 
-	
+
 }
