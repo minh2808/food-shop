@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{base::layout(~{::section})}">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+	<section>
+		<div class="container-fluid p-5 mt-5">
+			<div class="row">
+				<div class="col-md-3 offset-md-4 ">
+					<div class="card card-sh">
+						<div class="card-header text-center ">
+							<p class="fs-4">Edit Category</p>
+							<th:block th:if="${session.succMsg}">
+								<p class="text-success fw-bold">[[${session.succMsg}]]</p>
+								<th:block th:text="${@commonServiceImpl.removeSessionMessage()}"></th:block>
+							</th:block>
+
+							<th:block th:if="${session.errorMsg}">
+								<p class="text-danger fw-bold">[[${session.errorMsg}]]</p>
+								<th:block th:text="${@commonServiceImpl.removeSessionMessage()}"></th:block>
+							</th:block>
+
+						</div>
+						<div class="card-body">
+							<form action="/admin/updateCategory" method="post" >
+								<input type="hidden" name="id" th:value="${category.id}">
+								<div class="mb-3">
+									<label>Enter Category</label> <input type="text" name="name" th:value="${category.name}" class="form-control">
+								</div>
+								<div class="mb-3">
+									<label>Enter Description</label>
+									<textarea rows="3" cols="" class="form-control" name="description">	[[${category.description}]]</textarea>
+							   </div>
+							
+
+								
+								
+								<button class="btn btn-warning col-md-12 mt-2">Update</button>
+							</form>
+						</div>
+					</div>
+				</div>
+
+
+
+			</div>
+		</div>
+	</section>
+</body>
+</html>
