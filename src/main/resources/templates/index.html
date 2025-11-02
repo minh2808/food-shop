@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{base::layout(~{::section})}">
+	<head>
+		<title>  </title>
+	</head>
+	
+	<body>
+		<section>
+			<!-- BG img-->
+			          <div class="img-container">
+			            <img src="img/shop.jpg" class="d-block w-100 " alt="..." height="600px">
+						<div class="overlay">
+						        <div class="text">Welcome to Food Ordering System</div>
+								<a href="/products" class="btn btn-warning btn-lg mt-3"></i>Order Now</a></td>
+						    </div>
+			          </div>
+			          
+			<!---->
+			
+			
+				<!--product -->		
+					<div class="container-fluid bg-light p-3">
+								<div class="row">
+									<p class="text-center fs-4">Latest Food Items</p>
+					
+									<div class="col-md-3" th:each="p:${products}">
+										<div class="card shadow-sm p-3 mb-5 bg-body-tertiary rounded ">
+											<div class="card-body text-center">
+												<img alt="" th:src="@{'img/product/'+${p.image}}" class="" width="65%" height="140px">
+												<p class="text-center mt-2"><a th:href="@{'/viewProduct/'+${p.id}}" class="text-decoration-none">[[${p.title}]]</a></p>
+											</div>
+										</div>
+									</div>
+									
+		</section>
+		
+	</body>
+</html>
