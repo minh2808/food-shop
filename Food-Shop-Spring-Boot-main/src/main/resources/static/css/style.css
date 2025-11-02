@@ -1,0 +1,46 @@
+.card-sh {
+	box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.3);
+}
+
+.cat-div{
+	box-shadow: 0 0 10px rgba(0, 0, 0, .1);
+}
+
+.card-body img{
+	border-radius: 5px;
+	 transition: all 0.3s ease-in-out;
+}
+
+.card-body img:hover{
+	transform: scale(1.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}  
+ 
+.error{
+	color: red;
+}
+
+
+
+.img-container {
+    position: relative;
+    text-align: center;
+    color: white;
+}
+
+.overlay {
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    width: 70% ;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.3); /* Optional: Add a background color with transparency */
+    padding: 10px 20px;
+    border-radius: 5px;
+}
+
+.text {
+    font-size: 45px;
+   font-weight: bold;
+    color: #fff;
+}
