@@ -29,8 +29,7 @@ public class UserServiceImpl implements UserService {
 	public UserDtls saveUser(UserDtls user) {
 		 
 		user.setRole("ROLE_USER");
-		
-		
+
 		String encodePassword = passwordEncoder.encode(user.getPassword());
 		user.setPassword(encodePassword);
 		UserDtls saveUser=userRepository.save(user);
@@ -62,8 +61,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public UserDtls saveAdmin(UserDtls user) {
          user.setRole("ROLE_ADMIN");
-		
-		
+
 		String encodePassword = passwordEncoder.encode(user.getPassword());
 		user.setPassword(encodePassword);
 		UserDtls saveUser=userRepository.save(user);

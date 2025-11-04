@@ -23,7 +23,6 @@ public class ProductOrder {
 
 	private LocalDate orderDate;
 
-	
 
 	@ManyToOne
 	private Product product;

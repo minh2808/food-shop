@@ -1,40 +1,65 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-	th:replace="~{base::layout(~{::section})}">
-	<head>
-		<title>  </title>
-	</head>
-	
-	<body>
-		<section>
-			<!-- BG img-->
-			          <div class="img-container">
-			            <img src="img/shop.jpg" class="d-block w-100 " alt="..." height="600px">
-						<div class="overlay">
-						        <div class="text">Welcome to Food Ordering System</div>
-								<a href="/products" class="btn btn-warning btn-lg mt-3"></i>Order Now</a></td>
-						    </div>
-			          </div>
-			          
-			<!---->
-			
-			
-				<!--product -->		
-					<div class="container-fluid bg-light p-3">
-								<div class="row">
-									<p class="text-center fs-4">Latest Food Items</p>
-					
-									<div class="col-md-3" th:each="p:${products}">
-										<div class="card shadow-sm p-3 mb-5 bg-body-tertiary rounded ">
-											<div class="card-body text-center">
-												<img alt="" th:src="@{'/img/product/'+${p.image}}" class="" width="65%" height="140px">
-												<p class="text-center mt-2"><a th:href="@{'/viewProduct/'+${p.id}}" class="text-decoration-none">[[${p.title}]]</a></p>
-											</div>
-										</div>
-									</div>
-								</div>
-					</div>
-		</section>
-		
-	</body>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{base::layout(~{::section})}">
+<head>
+    <title>Trang chủ - Food Shop</title>
+</head>
+
+<body>
+<section>
+    <div class="hero-container">
+
+        <div class="hero-image-pane hero-image-left d-none d-md-flex">
+        </div>
+
+        <div class="hero-item hero-content">
+
+            <h1 class="hero-title">
+                MÓN ĂN
+                <span class="highlight-text">NGON</span>
+                <span class="sub-title-line">GIAO HÀNG TẬN NƠI</span>
+            </h1>
+
+            <p class="lead mb-4 text-muted" style="max-width: 450px;">Khám phá những món ăn hấp dẫn, được chế biến thủ công và giao đến tay bạn chỉ trong nháy mắt!</p>
+
+            <div class="mb-4 w-100">
+                <div class="input-group input-group-lg shadow-sm mx-auto mb-3" style="max-width: 450px;">
+                    <input type="text" class="form-control" placeholder="Nhập món ăn...">
+                    <button class="btn btn-accent-red text-white">Tìm</button>
+                </div>
+            </div>
+
+            <a href="/products" class="btn btn-accent-red btn-lg shadow-sm">
+                <i class="fa-solid fa-basket-shopping me-2"></i>Khám phá Menu
+            </a>
+
+        </div>
+
+        <div class="hero-image-pane hero-image-right d-none d-md-flex">
+        </div>
+    </div>
+
+    <div class="container py-5">
+        <h2 class="text-center mb-5 fw-bold">🔥 Món ăn mới nhất</h2>
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-3" th:each="p:${products}">
+                <div class="card product-card-hover border-0">
+                    <div class="p-3">
+                        <a th:href="@{'/viewProduct/'+${p.id}}">
+                            <img th:src="@{'img/product/'+${p.image}}" class="card-img-top rounded" alt="Hình ảnh sản phẩm" style="height: 200px; object-fit: cover;">
+                        </a>
+                    </div>
+                    <div class="card-body text-center pt-0">
+                        <h5 class="card-title mb-2 text-truncate">
+                            <a th:href="@{'/viewProduct/'+${p.id}}" class="text-decoration-none text-dark">[[${p.title}]]</a>
+                        </h5>
+                        <span class="fw-bold accent-color fs-5">[[${p.discountPrice}]]₫</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+</body>
 </html>

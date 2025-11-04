@@ -7,10 +7,7 @@ import lombok.ToString;
 @Data
 public class OrderRequest {
 
-	private String firstName;
-
-	
-	private String lastName;
+	private String fullName;
 
 	private String email;
 
@@ -18,28 +15,16 @@ public class OrderRequest {
 
 	private String address;
 
-	private String city;
+	private String cityOrProvince;
 
-	private String state;
-
-	private String pincode;
-	
 	private String paymentType;
 	
-	public String getFirstName() {
-		return firstName;
+	public String getFullName() {
+		return fullName;
 	}
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
 	}
 
 	public String getEmail() {
@@ -66,29 +51,14 @@ public class OrderRequest {
 		this.address = address;
 	}
 
-	public String getCity() {
-		return city;
+	public String getCityOrProvince() {
+		return cityOrProvince;
 	}
 
-	public void setCity(String city) {
-		this.city = city;
+	public void setCityOrProvince(String cityOrProvince) {
+		this.cityOrProvince = cityOrProvince;
 	}
 
-	public String getState() {
-		return state;
-	}
-
-	public void setState(String state) {
-		this.state = state;
-	}
-
-	public String getPincode() {
-		return pincode;
-	}
-
-	public void setPincode(String pincode) {
-		this.pincode = pincode;
-	}
 
 	public String getPaymentType() {
 		return paymentType;
