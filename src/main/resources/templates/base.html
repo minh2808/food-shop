@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="/css/style.css">
-
+    <meta charset="UTF-8">
 </head>
 
 <body>
@@ -30,13 +30,12 @@
 
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"> Danh mục </a>
-                    <ul class="dropdown-menu">
+                    <ul class="dropdown-menu dropdown-menu-dark">
                         <li th:each="c:${categories}"><a class="dropdown-item" th:href="@{'/products?category='+${c.name}}">[[${c.name}]]</a></li>
                     </ul>
                 </li>
 
                 <li class="nav-item d-lg-none"><a class="nav-link" href="#">Về chúng tôi</a></li>
-                <li class="nav-item d-lg-none"><a class="nav-link" href="#">Trợ giúp</a></li>
             </ul>
 
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center">

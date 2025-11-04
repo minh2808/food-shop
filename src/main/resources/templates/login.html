@@ -1,62 +1,69 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-	th:replace="~{base::layout(~{::section})}">
-	<head>
-		<title>  </title>
-	</head>
-	
-	<body>
-		<section>
-		         
-		        <div class="container mt-5 p-5">
-		            <div class="row">
-		
-		                <div class="col-md-6 p-5">
-		                      <img src="img/bike.jpg" width="100%" height="400px">
-		                </div>
-		                 
-		                <div class="col-md-6 p-5">
-		                      <div class="card shadow p-3 bg-body-tertiary rounded">
-		                        <div class="card-header">
-		                            <p class="fs-5 text-center">Login</p>
-									
-									<div th:if="${param.error}" class="alert alert-danger text-center">
-										Invalid username & password</div>
-									
-																<div th:if="${param.logout}" class="alert alert-success">
-																	Logout Sucessfully</div>
-		                        </div>
-		
-		                        <div class="card-body">
-		                            <form action="/login" method="post">
-		                                <div class="mb-3">
-		                                    <label class="form-label">Email</label>
-		                                    <input required type="email" class="form-control" name="username">
-		                                </div>
-		
-		                                <div class="mb-3">
-		                                    <label class="form-label">Password</label>
-		                                    <input required  type="password" class="form-control" name="password">
-		                                </div>
-		                                 
-		                                <div class="text-center">
-		                                <button type="submit" class="btn btn-primary text-white ">Login</button>
-		                            </div>
-		                            </form>
-		                        </div>
-		                        <div class="card-footer text-center">
-		         
-		                             Don't have an account?<a href="/register" class="text-decoration-none">Create one</a>
-		                           
-		                        </div>
-		
-		                      </div>
-		                </div>
-		                
-		            </div>
-		        </div>
-		
-		    </section>
-		
-	</body>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{base::layout(~{::section})}">
+<head>
+    <title>Đăng nhập</title>
+    <style>
+        /* Thêm padding cho nội dung trên mobile nếu cần */
+        @media (max-width: 991px) {
+            .card-login {
+               margin-top: 20px;
+            }
+        }
+    </style>
+    <meta charset="UTF-8">
+</head>
+
+<body>
+<section>
+    <div class="container py-5">
+        <div class="row justify-content-center">
+
+            <div class="col-md-5">
+                <div class="card shadow-lg border-0 card-login rounded-3">
+                    <div class="card-body p-5">
+                        <h2 class="text-center fw-bold mb-4 accent-color">Chào mừng trở lại!</h2>
+
+                        <div th:if="${param.error}" class="alert alert-danger text-center alert-dismissible fade show" role="alert">
+                            <i class="fa-solid fa-circle-exclamation me-2"></i> Tên người dùng hoặc mật khẩu không hợp lệ
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+
+                        <div th:if="${param.logout}" class="alert alert-success text-center alert-dismissible fade show" role="alert">
+                            <i class="fa-solid fa-check me-2"></i> Đăng xuất thành công
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+
+                        <form action="/login" method="post">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Email</label>
+                                <input required type="email" class="form-control" name="username" placeholder="Địa chỉ email của bạn">
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="form-label fw-bold">Mật khẩu</label>
+                                <input required  type="password" class="form-control" name="password" placeholder="Mật khẩu của bạn">
+                            </div>
+
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-accent-red btn-lg">
+                                    <i class="fa-solid fa-right-to-bracket me-2"></i> Đăng nhập
+                                </button>
+                            </div>
+                        </form>
+
+                        <hr class="my-4">
+
+                        <div class="text-center">
+                            Bạn chưa có tài khoản?
+                            <a href="/register" class="text-decoration-none fw-bold accent-color">Đăng ký ngay</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+</body>
 </html>

@@ -1,21 +1,42 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://thymeleaf.org"
+<html lang="vi" xmlns:th="http://thymeleaf.org"
       th:replace="~{base::layout(~{::section})}">
 <head>
+    <title>Tất cả sản phẩm</title>
+    <style>
+        .search-container {
+            background-color: #f8f9fa;
+            padding: 30px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+        .category-sidebar .list-group-item.active {
+            background-color: #FF0000 !important; /* Màu đỏ nhấn */
+            border-color: #FF0000 !important;
+            color: white !important;
+            font-weight: bold;
+        }
+        .product-card-hover {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: none;
+            border-radius: 0.75rem;
+        }
+        .product-card-hover:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+    </style>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
 </head>
 <body>
 
 <section>
-    <div class="container-fluid bg-success p-4 mt-5">
+    <div class="container-fluid search-container">
         <div class="row">
             <div class="col-md-8 offset-md-2">
                 <form action="search" method="get">
-                    <div class="input-group">
-                        <input type="text" class="form-control" name="ch">
-                        <button class="btn btn-light text-dark ms-3"><i class="fa-solid fa-magnifying-glass"></i>Search</button>
+                    <div class="input-group input-group-lg shadow-sm">
+                        <input type="text" class="form-control" name="ch" placeholder="Tìm kiếm món ăn...">
+                        <button class="btn btn-accent-red text-white"><i class="fa-solid fa-magnifying-glass me-2"></i>Tìm kiếm</button>
                     </div>
                 </form>
             </div>
@@ -23,44 +44,45 @@
     </div>
 
 
-    <div class="container-fluid bg-light mt-1">
+    <div class="container py-5">
         <div class="row">
 
-            <div class="col-md-2 p-0">
-
-                <div class="card shadow-sm p-0 mb-5 bg-body-tertiary rounded">
-                    <div class="card-body">
-                        <div class="list-group">
-                            <p class="fs-4">Category</p>
-                            <a href="/products" th:classappend="${paramValue==''} ? 'active bg-success':''" class="list-group-item list-group-item-action" aria-current="true"> All </a>
-                            <a th:each="c:${categories}" th:href="@{'/products?category='+${c.name}}" th:classappend="${paramValue == c.name} ? 'active bg-success':''" class="list-group-item list-group-item-action ">[[${c.name}]]</a>
-
-
-
+            <div class="col-md-3 category-sidebar">
+                <div class="card shadow-sm border-0 rounded-3">
+                    <div class="card-body p-4">
+                        <p class="fs-4 fw-bold border-bottom pb-2">Danh mục</p>
+                        <div class="list-group list-group-flush">
+                            <a href="/products" th:classappend="${paramValue==''} ? 'active':''" class="list-group-item list-group-item-action" aria-current="true"> Tất cả sản phẩm </a>
+                            <a th:each="c:${categories}" th:href="@{'/products?category='+${c.name}}" th:classappend="${paramValue == c.name} ? 'active':''" class="list-group-item list-group-item-action ">[[${c.name}]]</a>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="col-md-10">
-                <div class="card shadow-sm p-3 mb-5 bg-body-tertiary rounded">
-                    <div class="card-body">
-                        <p class="fs-3 text-center">Food Items</p>
-                        <div class="row">
+            <div class="col-md-9">
+                <div class="card border-0 bg-transparent">
+                    <div class="card-body p-0">
+                        <h3 class="text-center fw-bold mb-4">[[${paramValue==''} ? 'Tất cả món ăn' : ${paramValue}]]</h3>
+                        <div class="row g-4">
 
                             <th:block th:if="${products.size>0}">
-                                <div class="col-md-3" th:each="p:${products}">
-                                    <div class="card shadow p-1 mb-5 ">
-                                        <div class="card-body ">
-                                            <img alt="" th:src="@{'/img/product/'+${p.image}}" width="100%"	height="200px">
-                                            <p class="fs-5 text-center mt-2">[[${p.title}]]</p>
-                                            <div class="row text-center">
-                                                <p class="fs-6 fw-bold">
-                                                    <span>&#8377; [[${p.discountPrice}]]</span> <br>
-                                                    <span class="text-decoration-line-through text-secondary">&#8377; [[${p.price}]]</span>
-                                                    <span class="fs-6 text-success">[[${p.discount}]]% off </span>
+                                <div class="col-sm-6 col-md-4" th:each="p:${products}">
+                                    <div class="card product-card-hover shadow-sm border-0 rounded-3">
+                                        <div class="card-body p-2">
+                                            <a th:href="@{'/viewProduct/'+${p.id}}">
+                                                <img th:src="@{'/img/product/'+${p.image}}" class="card-img-top rounded" alt="Hình ảnh sản phẩm" style="height: 180px; object-fit: cover;">
+                                            </a>
+
+                                            <p class="fs-5 text-center mt-3 mb-1 text-truncate fw-semibold">[[${p.title}]]</p>
+                                            <div class="text-center">
+                                                <p class="mb-1">
+                                                    <span class="fs-4 fw-bold accent-color me-2">&#8377; [[${p.discountPrice}]]</span>
+                                                    <span class="text-decoration-line-through text-secondary me-2">&#8377; [[${p.price}]]</span>
                                                 </p>
-                                                <a th:href="@{'/viewProduct/'+${p.id}}" class="btn btn-success col-md-6 offset-md-3">View</a>
+                                                <span class="badge bg-danger fs-6">Giảm [[${p.discount}]]%</span>
+                                            </div>
+                                            <div class="d-grid mt-3">
+                                                <a th:href="@{'/viewProduct/'+${p.id}}" class="btn btn-outline-dark btn-sm rounded-pill">Xem chi tiết</a>
                                             </div>
                                         </div>
                                     </div>
@@ -68,17 +90,18 @@
                             </th:block>
 
                             <th:block th:unless="${products.size>0}">
-                                <p class="fs-4 text-center mt-4 text-danger">Product Not Found</p>
+                                <div class="col-12">
+                                    <p class="fs-4 text-center mt-5 p-5 bg-light text-danger rounded-3">
+                                        <i class="fa-solid fa-box-open me-2"></i> Không tìm thấy sản phẩm nào.
+                                    </p>
+                                </div>
                             </th:block>
-
-                            <!-- TODO : Remove after backend implement  -->
-
 
                         </div>
                     </div>
                 </div>
-
             </div>
+
         </div>
     </div>
 </section>

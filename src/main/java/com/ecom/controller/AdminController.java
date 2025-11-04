@@ -273,6 +273,7 @@ public class AdminController {
 		m.addAttribute("orders", allOrders);
 		return "/admin/orders";
 	}
+
 	
 	@PostMapping("/update-order-status")
 	public String updateOrderStatus(@RequestParam Integer id, @RequestParam Integer st, HttpSession session) {

@@ -41,7 +41,7 @@ a:hover {
     padding-top: 0.75rem;
     padding-bottom: 0.75rem;
     top: 0;
-    z-index: 1030;
+    z-index: 1070;
 }
 .navbar-main .nav-link {
     color: #ffffff !important;
@@ -50,6 +50,10 @@ a:hover {
 }
 .navbar-main .nav-link:hover {
     color: #FF0000 !important;
+}
+
+.navbar-main .dropdown-menu {
+    z-index: 1051;
 }
 
 /* --- FOOTER STYLES --- */
@@ -133,7 +137,7 @@ a:hover {
 }
 .hero-image-right {
     /* ĐÃ SỬA: Hình ảnh bên phải 25% */
-    flex-basis: 25%;
+    flex-basis: 27%;
     background-image: url('../img/phone-web.jpeg');
     background-repeat: no-repeat;
     background-size: contain;

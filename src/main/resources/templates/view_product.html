@@ -1,63 +1,98 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-	th:replace="~{base::layout(~{::section})}">
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{base::layout(~{::section})}">
 <head>
-<meta charset="ISO-8859-1">
-<title>Insert title here</title>
+    <title>Chi tiết sản phẩm</title>
+    <style>
+        .product-detail-container {
+            padding-top: 3rem;
+            padding-bottom: 5rem;
+        }
+        .product-image {
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            object-fit: cover;
+        }
+        .price-display {
+            background-color: #f7f7f7;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border-left: 5px solid #FF0000; /* Đường viền đỏ nổi bật */
+        }
+    </style>
+    <meta charset="UTF-8">
 </head>
 <body>
-	<section>
-		<div class="container card-sh" style="margin-top: 70px;margin-bottom: 100px">
+<section>
+    <div class="container product-detail-container">
 
-			<div class="col-md-12 p-4">
-				<p class="fs-3 text-center">Products Details</p> <br>
-				<div class="row">
-					
-					                    <th:block th:if="${session.succMsg}">
-											<p class="text-success alert alert-success text-center" role="alert">[[${session.succMsg}]]</p>
-											<th:block th:text="${@commonServiceImpl.removeSessionMessage()}"></th:block>
-										</th:block>
-					
-										<th:block th:if="${session.errorMsg}">
-											<p class="text-danger text-center  alert alert-danger">[[${session.errorMsg}]]</p>
-											<th:block th:text="${@commonServiceImpl.removeSessionMessage()}"></th:block>
-					
-										</th:block>
-					
-					
-					<div class="col-md-6 text-end">
-						<img alt="" th:src="@{'/' + ${product.image}}" style="border-radius: 4px; box-shadow: 0 0 10px rgba(0, 0, 0, .1);"  width="390px" height="400px">
-					</div>
+        <div class="col-md-10 offset-md-1 p-4 bg-white rounded-3 shadow-lg">
+            <h1 class="text-center mb-5 fw-bold accent-color">Chi tiết sản phẩm</h1>
 
-					<div class="col-md-6">
+            <div class="row">
 
-						<p class="fs-3">[[${product.title}]]</p>
-						<p>
-							<span class="fw-bold">Description : </span><br>	[[${product.description}]]
-						</p>
-						<p>
-							<span class="fw-bold">Category:	[[${product.category}]]</span>
-							
-						</p>
-						<p class="fs-5 fw-bold">
-							Price :   [[${@commonServiceImpl.formatVnd(product.discountPrice)}]]
-							<span class="fs-6 text-decoration-line-through text-secondary">[[${@commonServiceImpl.formatVnd(product.price)}]]</span>
-							<span class="fs-6  text-success">[[${product.discount}]]% off</span>
-						</p>
+                <div class="col-12 mb-4">
+                    <th:block th:if="${session.succMsg}">
+                        <div class="alert alert-success text-center" role="alert">
+                            <i class="fa-solid fa-check me-2"></i> [[${session.succMsg}]]
+                        </div>
+                        <th:block th:text="${@commonServiceImpl.removeSessionMessage()}"></th:block>
+                    </th:block>
 
-						<th:block th:if="${user==null}">						
-							<a href="/signin" class="btn btn-danger col-md-6">Add To Cart</a>
-						</th:block>
-						
-						                      <th:block th:unless="${user==null}">						
-												<a th:href="@{'/user/addCart?pid='+${product.id}+'&uid='+${user.id}}" class="btn btn-danger col-md-6">Add To Cart</a>
-											  </th:block>
-					</div>
-				</div>
-			</div>
-		</div>
+                    <th:block th:if="${session.errorMsg}">
+                        <div class="alert alert-danger text-center" role="alert">
+                            <i class="fa-solid fa-triangle-exclamation me-2"></i> [[${session.errorMsg}]]
+                        </div>
+                        <th:block th:text="${@commonServiceImpl.removeSessionMessage()}"></th:block>
+                    </th:block>
+                </div>
+
+                <div class="col-md-5">
+                    <img alt="Hình ảnh sản phẩm" th:src="@{'/img/product/'+${product.image}}" class="product-image" width="100%" height="450px">
+                </div>
+
+                <div class="col-md-7 ps-md-5">
+
+                    <p class="lead">
+                        <span class="fw-bold">Tên sản phẩm: </span><span class="fs-4">[[${product.title}]]</span>
+                    </p>
+                    <p>
+                        <span class="fw-bold">Danh mục:</span>
+                        <span class="badge bg-secondary">[[${product.category}]]</span>
+                    </p>
+
+                    <h4 class="fw-bold mt-4">Mô tả</h4>
+                    <p class="text-muted">
+                        [[${product.description}]]
+                    </p>
+
+                    <div class="price-display">
+                        <span class="fs-2 fw-bold accent-color me-3">&#8377; [[${product.discountPrice}]]</span>
+                        <span class="fs-4 text-decoration-line-through text-secondary me-2">&#8377; [[${product.price}]]</span>
+                        <span class="badge bg-danger fs-5">Giảm [[${product.discount}]]%</span>
+                    </div>
 
 
-	</section>
+                    <div class="mt-5 d-grid">
+                        <th:block th:if="${user==null}">
+                            <a href="/signin" class="btn btn-accent-red btn-lg">
+                                <i class="fa-solid fa-cart-plus me-2"></i> Đăng nhập để thêm vào giỏ hàng
+                            </a>
+                        </th:block>
+
+                        <th:block th:unless="${user==null}">
+                            <a th:href="@{'/user/addCart?pid='+${product.id}+'&uid='+${user.id}}" class="btn btn-accent-red btn-lg">
+                                <i class="fa-solid fa-cart-plus me-2"></i> Thêm vào giỏ hàng
+                            </a>
+                        </th:block>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</section>
 </body>
 </html>
