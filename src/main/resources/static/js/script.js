@@ -21,8 +21,11 @@ $(function(){
 				required: true,
 				space: true,
 				numericOnly: true,
+<<<<<<< HEAD
 				minlength: 10,
 				maxlength: 12
+=======
+>>>>>>> vinh
 
 			},
 			password: {
@@ -40,6 +43,7 @@ $(function(){
 				required: true,
 				all: true
 
+<<<<<<< HEAD
 			},
 
 			city: {
@@ -59,11 +63,14 @@ $(function(){
 
 			}, img: {
 				required: true,
+=======
+>>>>>>> vinh
 			}
 			
 		},
 		messages:{
 			name:{
+<<<<<<< HEAD
 				required:'name required',
 				lettersonly:'invalid name'
 			},
@@ -115,6 +122,37 @@ $(function(){
 			},
 			img: {
 				required: 'image required',
+=======
+				required:'Yêu cầu điền',
+				lettersonly:'Tên không hợp lệ'
+			},
+			email: {
+				required: 'Yêu cầu điền',
+				space: 'Không được có khoảng trắng',
+				email: 'Email không hợp lệ'
+			},
+			mobileNumber: {
+				required: 'Yêu cầu điền',
+				space: 'Không được có khoảng trắng',
+				numericOnly: 'Số điện thoại không hợp lệ',
+			},
+
+			password: {
+				required: 'Yêu cầu điền',
+				space: 'Không được có khoảng trắng'
+
+			},
+			confirmpassword: {
+				required: 'Yêu cầu điền',
+				space: 'Không được có khoảng trắng',
+				equalTo: 'Không trùng khớp'
+
+			},
+			address: {
+				required: 'Yêu cầu điền',
+				all: 'Không hợp lệ'
+
+>>>>>>> vinh
 			}
 		}
 	})
@@ -153,6 +191,7 @@ $orders.validate({
 				all: true
 
 			},
+<<<<<<< HEAD
 
 			city: {
 				required: true,
@@ -170,12 +209,15 @@ $orders.validate({
 				numericOnly: true
 
 			},
+=======
+>>>>>>> vinh
 			paymentType:{
 			required: true
 			}
 		},
 		messages:{
 			firstName:{
+<<<<<<< HEAD
 				required:'first required',
 				lettersonly:'invalid name'
 			},
@@ -220,6 +262,33 @@ $orders.validate({
 			},
 			paymentType:{
 			required: 'select payment type'
+=======
+				required:'Yêu cầu điền',
+				lettersonly:'Không hợp lệ'
+			},
+			lastName:{
+				required:'Yêu cầu điền',
+				lettersonly:'Không hợp lệ'
+			},
+			email: {
+				required: 'Yêu cầu điền',
+				space: 'Không được có khoảng trắng',
+				email: 'Không hợp lệ'
+			},
+			mobileNo: {
+				required: 'Yêu cầu điền',
+				space: 'Không được có khoảng trắng',
+				numericOnly: 'Không hợp lệ',
+			}
+		   ,
+			address: {
+				required: 'Yêu cầu điền',
+				all: 'Không hợp lệ'
+
+			},
+			paymentType:{
+			required: 'Chọn phương thức thanh toán'
+>>>>>>> vinh
 			}
 		}	
 })

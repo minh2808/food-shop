@@ -4,6 +4,7 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Insert title here</title>
+<<<<<<< HEAD
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
@@ -16,6 +17,11 @@
 		<div th:if="${success}" class="alert alert-success" id="successPopup" style="display:none;">
 			[[${success}]]
 		</div>
+=======
+</head>
+<body>
+	<section>
+>>>>>>> vinh
 		<div class="container-fluid mt-5 p-5">
 
 			<div class="card card-sh">
@@ -23,12 +29,20 @@
 					<p class="fs-4">Cart Page</p>
 					<th:block th:if="${session.succMsg}">
 						<p class="text-success fw-bold">[[${session.succMsg}]]</p>
+<<<<<<< HEAD
 						<th:block th:text="${@commonServiceImpl.removeSessionMessage()}"></th:block>
+=======
+						<th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
+>>>>>>> vinh
 					</th:block>
 
 					<th:block th:if="${session.errorMsg}">
 						<p class="text-danger fw-bold">[[${session.errorMsg}]]</p>
+<<<<<<< HEAD
 						<th:block th:text="${@commonServiceImpl.removeSessionMessage()}"></th:block>
+=======
+						<th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
+>>>>>>> vinh
 					</th:block>
 				</div>
 				<div class="card-body">
@@ -46,18 +60,31 @@
 						<tbody>
 							<tr th:each="cart,c:${carts}">
 								<th scope="row">[[${c.count}]]</th>
+<<<<<<< HEAD
 								<td><img th:src="@{'/'+ ${cart.product.image}}" width="70px" height="70px"></td>
 								<td>[[${cart.product.title}]]</td>
 								<td>[[${@commonServiceImpl.formatVnd(cart.product.discountPrice)}]]</td>
 								<td class="text-center"><a th:href="@{'/user/cartQuantityUpdate?sy=de&cid='+${cart.id}}"> <i class="fa-solid fa-minus"></i>
 								</a> [ [[${cart.quantity}]] ] <a th:href="@{'/user/cartQuantityUpdate?sy=in&cid='+${cart.id}}"> <i class="fa-solid fa-plus"></i></a> </td>
 								<td>[[${@commonServiceImpl.formatVnd(cart.totalPrice)}]] </td>
+=======
+								<td><img th:src="@{'/img/product/'+${cart.product.image}}" width="70px" height="70px"></td>
+								<td>[[${cart.product.title}]]</td>
+								<td>[[${cart.product.discountPrice}]]</td>
+								<td class="text-center"><a th:href="@{'/user/cartQuantityUpdate?sy=de&cid='+${cart.id}}"> <i class="fa-solid fa-minus"></i>
+								</a> [ [[${cart.quantity}]] ] <a th:href="@{'/user/cartQuantityUpdate?sy=in&cid='+${cart.id}}"> <i class="fa-solid fa-plus"></i></a> </td>
+								<td>[[${cart.totalPrice}]]</td>
+>>>>>>> vinh
 							</tr>
 						    
 							<tr>
 								<td colspan="4"></td>
 								<td class="fw-bold">Total Price</td>
+<<<<<<< HEAD
 								<td class="fw-bold">[[${@commonServiceImpl.formatVnd(totalOrderPrice) }]] </td>
+=======
+								<td class="fw-bold">&#8377; [[${totalOrderPrice}]]</td>
+>>>>>>> vinh
 							</tr>  
 
 						</tbody>
@@ -72,6 +99,7 @@
 				
 				
 			</div>
+<<<<<<< HEAD
 		<script>
 			document.addEventListener("DOMContentLoaded", function() {
 				const errorPopup = document.getElementById("errorPopup");
@@ -98,4 +126,11 @@
 
 </body>
 
+=======
+	
+			
+			
+	</section>
+</body>
+>>>>>>> vinh
 </html>

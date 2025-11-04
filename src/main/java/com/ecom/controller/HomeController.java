@@ -117,7 +117,9 @@ public class HomeController {
 	public String product(@PathVariable int id, Model m) {
 		Product productById = productService.getProductById(id);
 		m.addAttribute("product", productById);
+
 		System.out.println(productById.getImage());
+
 		return "view_product";
 	}
 	
@@ -131,15 +133,21 @@ public class HomeController {
 		Boolean existsEmail = userService.existsEmail(user.getEmail());
 		
 		if (existsEmail) {
-			session.setAttribute("errorMsg", "Email already exist");
+
+
+			session.setAttribute("errorMsg", "Email đã tồn tại");
+
 		} else {
 			UserDtls saveUser = userService.saveUser(user);
 
 			if (!ObjectUtils.isEmpty(saveUser)) {
 				
-				session.setAttribute("succMsg", "Register successfully");
+
+
+				session.setAttribute("succMsg", "Đăng kí thành công");
 			} else {
-				session.setAttribute("errorMsg", "something wrong on server");
+				session.setAttribute("errorMsg", "Có lỗi ở phía server");
+
 			}
 		}
 		
@@ -153,8 +161,5 @@ public class HomeController {
 		return "admin";
 	}
 	
-	
-	
-	
-	
+
 } 

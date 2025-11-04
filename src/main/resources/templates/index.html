@@ -27,13 +27,17 @@
 									<div class="col-md-3" th:each="p:${products}">
 										<div class="card shadow-sm p-3 mb-5 bg-body-tertiary rounded ">
 											<div class="card-body text-center">
-												<img alt="" th:src="@{${p.image}}" class="" width="65%" height="140px">
+
+												<img alt="" th:src="@{'img/product/'+${p.image}}" class="" width="65%" height="140px">
+
 												<p class="text-center mt-2"><a th:href="@{'/viewProduct/'+${p.id}}" class="text-decoration-none">[[${p.title}]]</a></p>
 											</div>
 										</div>
 									</div>
+
 								</div>
 					</div>
+
 		</section>
 		
 	</body>

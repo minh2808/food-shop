@@ -3,8 +3,10 @@ package com.ecom.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+
 import com.ecom.exception.InsufficientStockException;
 import com.ecom.exception.ResourceNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
@@ -23,11 +25,14 @@ public class CartServiceImpl implements CartService {
 	@Autowired
 	private CartRepository cartRepository;
 
+
+
 	@Autowired
 	private UserRepository userRepository;
 
 	@Autowired
 	private ProductRepository productRepository;
+
 
 	//Thêm/Cập nhật với Kiểm tra Tồn kho
 	@Override
@@ -161,4 +166,5 @@ public class CartServiceImpl implements CartService {
 			throw new InsufficientStockException("Không thể đặt, chỉ còn " + stockAvailable + " trong kho.");
 		}
 	}
+
 }

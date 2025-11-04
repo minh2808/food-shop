@@ -3,7 +3,9 @@ package com.ecom.controller;
 import java.security.Principal;
 import java.util.List;
 
+
 import com.ecom.exception.InsufficientStockException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -95,6 +97,7 @@ public class UserController {
 	
 	//cart inc/ dec 
 	@GetMapping("/cartQuantityUpdate")
+
 	public String updateCartQuantity(@RequestParam String sy, @RequestParam Integer cid , RedirectAttributes redirectAttributes) {
 		try {
 			cartService.updateQuantity(sy, cid);

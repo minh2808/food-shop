@@ -7,6 +7,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
+
 import java.text.NumberFormat;
 import java.util.Locale;
 
@@ -19,6 +20,7 @@ public class CommonServiceImpl implements CommonService {
 			NumberFormat formatter = NumberFormat.getInstance(new Locale("vi", "VN"));
 			return formatter.format(price);
 		}
+
 
 
 		@Override
