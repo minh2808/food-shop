@@ -53,7 +53,13 @@
 			<scope>runtime</scope>
 			<optional>true</optional>
 		</dependency>
-		
+		<!-- H2 Database để chạy tạm không cần MySQL -->
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+
 		<dependency>
 	<groupId>org.projectlombok</groupId>
 		<artifactId>lombok</artifactId>

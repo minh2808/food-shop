@@ -21,8 +21,6 @@ $(function(){
 				required: true,
 				space: true,
 				numericOnly: true,
-				minlength: 10,
-				maxlength: 12
 
 			},
 			password: {
@@ -40,81 +38,40 @@ $(function(){
 				required: true,
 				all: true
 
-			},
-
-			city: {
-				required: true,
-				space: true
-
-			},
-			state: {
-				required: true,
-
-
-			},
-			pincode: {
-				required: true,
-				space: true,
-				numericOnly: true
-
-			}, img: {
-				required: true,
 			}
 			
 		},
 		messages:{
 			name:{
-				required:'name required',
-				lettersonly:'invalid name'
+				required:'Yêu cầu điền',
+				lettersonly:'Tên không hợp lệ'
 			},
 			email: {
-				required: 'email name must be required',
-				space: 'space not allowed',
-				email: 'Invalid email'
+				required: 'Yêu cầu điền',
+				space: 'Không được có khoảng trắng',
+				email: 'Email không hợp lệ'
 			},
 			mobileNumber: {
-				required: 'mob no must be required',
-				space: 'space not allowed',
-				numericOnly: 'invalid mob no',
-				minlength: 'min 10 digit',
-				maxlength: 'max 12 digit'
+				required: 'Yêu cầu điền',
+				space: 'Không được có khoảng trắng',
+				numericOnly: 'Số điện thoại không hợp lệ',
 			},
 
 			password: {
-				required: 'password must be required',
-				space: 'space not allowed'
+				required: 'Yêu cầu điền',
+				space: 'Không được có khoảng trắng'
 
 			},
 			confirmpassword: {
-				required: 'confirm password must be required',
-				space: 'space not allowed',
-				equalTo: 'password mismatch'
+				required: 'Yêu cầu điền',
+				space: 'Không được có khoảng trắng',
+				equalTo: 'Không trùng khớp'
 
 			},
 			address: {
-				required: 'address must be required',
-				all: 'invalid'
+				required: 'Yêu cầu điền',
+				all: 'Không hợp lệ'
 
-			},
-
-			city: {
-				required: 'city must be required',
-				space: 'space not allowed'
-
-			},
-			state: {
-				required: 'state must be required',
-				space: 'space not allowed'
-
-			},
-			pincode: {
-				required: 'pincode must be required',
-				space: 'space not allowed',
-				numericOnly: 'invalid pincode'
-
-			},
-			img: {
-				required: 'image required',
 			}
 		}
 	})
@@ -153,73 +110,37 @@ $orders.validate({
 				all: true
 
 			},
-
-			city: {
-				required: true,
-				space: true
-
-			},
-			state: {
-				required: true,
-
-
-			},
-			pincode: {
-				required: true,
-				space: true,
-				numericOnly: true
-
-			},
 			paymentType:{
 			required: true
 			}
 		},
 		messages:{
 			firstName:{
-				required:'first required',
-				lettersonly:'invalid name'
+				required:'Yêu cầu điền',
+				lettersonly:'Không hợp lệ'
 			},
 			lastName:{
-				required:'last name required',
-				lettersonly:'invalid name'
+				required:'Yêu cầu điền',
+				lettersonly:'Không hợp lệ'
 			},
 			email: {
-				required: 'email name must be required',
-				space: 'space not allowed',
-				email: 'Invalid email'
+				required: 'Yêu cầu điền',
+				space: 'Không được có khoảng trắng',
+				email: 'Không hợp lệ'
 			},
 			mobileNo: {
-				required: 'mob no must be required',
-				space: 'space not allowed',
-				numericOnly: 'invalid mob no',
-				minlength: 'min 10 digit',
-				maxlength: 'max 12 digit'
+				required: 'Yêu cầu điền',
+				space: 'Không được có khoảng trắng',
+				numericOnly: 'Không hợp lệ',
 			}
 		   ,
 			address: {
-				required: 'address must be required',
-				all: 'invalid'
-
-			},
-
-			city: {
-				required: 'city must be required',
-				space: 'space not allowed'
-
-			},
-			state: {
-				required: 'state must be required',
-				space: 'space not allowed'
-
-			},
-			pincode: {
-				required: 'pincode must be required',
-				space: 'space not allowed',
-				numericOnly: 'invalid pincode'
+				required: 'Yêu cầu điền',
+				all: 'Không hợp lệ'
 
 			},
 			paymentType:{
-			required: 'select payment type'
+			required: 'Chọn phương thức thanh toán'
 			}
 		}	
 })
