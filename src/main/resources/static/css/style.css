@@ -1,46 +1,192 @@
-.card-sh {
-	box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.3);
+
+/* Custom Style for Food Shop - Minimalist Dark/Red Theme */
+
+/* --- GLOBAL STYLES --- */
+body {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    background-color: #f8f9fa; /* Màu nền nhẹ */
+    color: #333;
 }
-
-.cat-div{
-	box-shadow: 0 0 10px rgba(0, 0, 0, .1);
+a {
+    text-decoration: none;
+    color: #000000;
 }
-
-.card-body img{
-	border-radius: 5px;
-	 transition: all 0.3s ease-in-out;
+a:hover {
+    color: #FF0000;
 }
-
-.card-body img:hover{
-	transform: scale(1.1);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}  
- 
-.error{
-	color: red;
+.accent-color {
+    color: #FF0000 !important; /* Màu nhấn Đỏ */
 }
-
-
-
-.img-container {
-    position: relative;
-    text-align: center;
+.btn-accent-red {
+     background-color: #FF0000;
+     border-color: #FF0000;
+     color: white;
+     font-weight: bold;
+     transition: background-color 0.3s ease;
+}
+.btn-accent-red:hover {
+    background-color: #CC0000;
+    border-color: #CC0000;
     color: white;
 }
 
-.overlay {
-    position: absolute;
-    top: 60%;
-    left: 50%;
-    width: 70% ;
-    transform: translate(-50%, -50%);
-    background-color: rgba(0, 0, 0, 0.3); /* Optional: Add a background color with transparency */
-    padding: 10px 20px;
-    border-radius: 5px;
+/* --- LAYOUT PADDING --- */
+.main-content-padding {
+     padding-top: 75px;
 }
 
-.text {
-    font-size: 45px;
-   font-weight: bold;
-    color: #fff;
+/* --- HEADER / NAV BAR STYLES --- */
+.navbar-main {
+    background-color: #000000 !important;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    top: 0;
+    z-index: 1070;
+}
+.navbar-main .nav-link {
+    color: #ffffff !important;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+.navbar-main .nav-link:hover {
+    color: #FF0000 !important;
+}
+
+.navbar-main .dropdown-menu {
+    z-index: 1051;
+}
+
+/* --- FOOTER STYLES --- */
+.footer-custom {
+     background-color: #1a1a1a;
+     color: #cccccc;
+     padding: 15px 0;
+     margin-top: 80px;
+     border-top: 3px solid #FF0000;
+}
+
+/* --- HERO SECTION STYLES (INDEX.HTML) --- */
+.hero-container {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    min-height: calc(100vh - 75px);
+    background-color: #fefefe;
+    overflow: hidden;
+}
+.hero-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+/* ĐÃ CẬP NHẬT: Chia tỷ lệ 35% - 40% - 25% */
+.hero-content {
+    /* Phần giữa: 40% */
+    flex-basis: 40%;
+    text-align: center;
+    background-color: #f0f0f0;
+    padding: 40px;
+    box-sizing: border-box;
+}
+
+/* Typography styles */
+.hero-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 3.5rem;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+}
+.highlight-text {
+    color: #FF0000;
+    text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.1);
+    font-size: 1.1em;
+    font-weight: 900;
+}
+.sub-title-line {
+    display: block;
+    font-size: 0.55em;
+    font-weight: 700;
+    color: #333333;
+    margin-top: 10px;
+}
+/* End Typography styles */
+
+/* Hero Image Panes */
+.hero-image-pane {
+    /* Base style giữ nguyên */
+    background-size: cover;
+    background-position: center;
+    min-height: auto;
+    box-sizing: border-box;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.hero-image-left {
+    /* ĐÃ SỬA: Hình ảnh bên trái 35% */
+    flex-basis: 35%;
+    background-image: url('../img/food-pan.jpg');
+}
+.hero-image-right {
+    /* ĐÃ SỬA: Hình ảnh bên phải 25% */
+    flex-basis: 27%;
+    background-image: url('../img/phone-web.jpeg');
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-color: #e9ecef;
+}
+
+/* Product Cards (General) */
+.product-card-hover {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: none;
+    border-radius: 0.75rem;
+}
+.product-card-hover:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+    .hero-title {
+        font-size: 3rem;
+    }
+    .sub-title-line {
+        font-size: 0.5em;
+    }
+}
+@media (max-width: 991px) {
+    /* Mobile: Hero Container chiếm toàn bộ màn hình */
+    .hero-container {
+        flex-direction: column;
+        min-height: 100vh;
+    }
+    .main-content-padding {
+        padding-top: 75px;
+    }
+    .hero-item {
+        flex-basis: auto;
+        padding: 20px 10px;
+    }
+    .hero-image-pane {
+        min-height: 200px;
+        flex-basis: auto; /* Trên mobile, tất cả chiếm 100% */
+    }
+    .hero-title {
+        font-size: 2.2rem;
+    }
+    .sub-title-line {
+        font-size: 0.45em;
+    }
+
 }

@@ -4,8 +4,6 @@ import java.security.Principal;
 import java.util.List;
 
 
-import com.ecom.exception.InsufficientStockException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +14,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+
+import com.ecom.exception.ResourceNotFoundException;
+import com.ecom.exception.InsufficientStockException;
+
 
 import com.ecom.model.Cart;
 import com.ecom.model.Category;
@@ -33,16 +36,18 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 @RequestMapping("/user")
 public class UserController {
-	
+
+
 	@Autowired
 	private UserService userService;
-	
+
 	@Autowired
 	private CategoryService categoryService;
-	
+
 	@Autowired
 	private CartService cartService;
-	
+
+
 	@Autowired
 	private OrderService orderService;
 
@@ -50,8 +55,7 @@ public class UserController {
 	public String home() {
 		return "user/home";
 	}
-	
-	
+
 	@ModelAttribute
 	public void getUserDetails(Principal p, Model m) {
 		if (p != null) {
@@ -64,38 +68,59 @@ public class UserController {
 		List<Category> allCategory = categoryService.getAllCategory();
 		m.addAttribute("categorys", allCategory);
 	}
-	
-	//add card notification
-	
-	@GetMapping("/addCart")
-	public String addToCart(@RequestParam Integer pid, @RequestParam Integer uid,HttpSession session) {
-		Cart saveCart = cartService.saveCart(pid, uid);
-		
-		if (ObjectUtils.isEmpty(saveCart)) {
-			session.setAttribute("errorMsg", "Product add to cart failed");
-		}else {
-			session.setAttribute("succMsg", "Product added to cart");
-		}
-		return "redirect:/viewProduct/" + pid;
-	}
-	
-	// card page
-	
-	@GetMapping("/cart")
-	public String loadCartPage(Principal p, Model m) {
 
-	    UserDtls user = getLoggedInUserDetails(p);
-		List<Cart> carts = cartService.getCartsByUser(user.getId());
-	    m.addAttribute("carts", carts);
-	    if (carts.size() > 0) {
-			Double totalOrderPrice = carts.get(carts.size() - 1).getTotalOrderPrice();
-			m.addAttribute("totalOrderPrice", totalOrderPrice);
-		}
-		return "/user/cart";
-	}
-	
-	
-	//cart inc/ dec 
+
+	// Thông báo thêm vào Giỏ hàng
+    @GetMapping("/addCart")
+    public String addToCart(@RequestParam Integer pid, @RequestParam Integer uid, HttpSession session) {
+        try {
+            Cart saveCart = cartService.saveCart(pid, uid);
+            if (!ObjectUtils.isEmpty(saveCart)) {
+                session.setAttribute("success", "Sản phẩm đã được thêm vào giỏ hàng");
+            }
+
+        } catch (ResourceNotFoundException e) {
+            session.setAttribute("error", "Không tìm thấy sản phẩm hoặc người dùng");
+
+        } catch (InsufficientStockException e) {
+            session.setAttribute("error", "Trong kho không đủ sản phẩm, không thể đặt");
+
+        } catch (Exception e) {
+            session.setAttribute("error", "Đã xảy ra lỗi hệ thống không mong muốn.");
+        }
+        return "redirect:/viewProduct/" + pid;             // Đặt hàng xong chuyển về trang sản phẩm
+    }
+
+
+    // Trang Cart
+    @GetMapping("/cart")
+    public String loadCartPage(Principal p, Model m, HttpSession session) {
+        UserDtls user = getLoggedInUserDetails(p);
+        try {
+            List<Cart> carts = cartService.getCartsByUser(user.getId());
+            m.addAttribute("carts", carts);
+            if (carts.size() > 0) {
+                // Lấy tổng giá cuối cùng
+                Double totalOrderPrice = carts.get(carts.size() - 1).getTotalOrderPrice();
+                m.addAttribute("totalOrderPrice", totalOrderPrice);
+
+            } else {
+                // Giỏ hàng trống, tổng giá bằng 0
+                m.addAttribute("totalOrderPrice", 0.0);
+            }
+            return "/user/cart";
+
+        } catch (ResourceNotFoundException e) {
+            session.setAttribute("error", "Lỗi: " + e.getMessage());
+            return "redirect:/user/";
+        } catch (Exception e) {
+            session.setAttribute("error", "Đã xảy ra lỗi không mong muốn khi tải giỏ hàng.");
+            return "redirect:/user/";
+        }
+    }
+
+
+	//cart inc/ dec
 	@GetMapping("/cartQuantityUpdate")
 
 	public String updateCartQuantity(@RequestParam String sy, @RequestParam Integer cid , RedirectAttributes redirectAttributes) {
@@ -115,72 +140,114 @@ public class UserController {
 	private UserDtls getLoggedInUserDetails(Principal p) {
 		String email = p.getName();
 		UserDtls userDtls = userService.getUserByEmail(email);
+
+        if (userDtls == null) {
+            throw new ResourceNotFoundException("Không tìm thấy người dùng đã đăng nhập có email là: " + email);
+        }
 		return userDtls;
 	}
-	
-	
-	@GetMapping("/orders")
-	public String orderPage(Principal p, Model m) {
-		 UserDtls user = getLoggedInUserDetails(p);
-			List<Cart> carts = cartService.getCartsByUser(user.getId());
-		    m.addAttribute("carts", carts);
-//		    m.addAttribute("user", user);
-		    if (carts.size() > 0) {
-		    	Integer quantity=carts.get(carts.size()-1).getQuantity();
-				Double totalOrderPrice = carts.get(carts.size() - 1).getTotalOrderPrice();
-				m.addAttribute("quantity", quantity);
-				m.addAttribute("totalOrderPrice", totalOrderPrice);
-			}
-		return "/user/order";
-	}
 
-	
-	@PostMapping("/save-order")
-	public String saveOrder(@ModelAttribute OrderRequest request, Principal p) {
-//	 System.out.println(request);
-	UserDtls user = getLoggedInUserDetails(p);
-	orderService.saveOrder(user.getId(), request);
 
-		return "redirect:/user/success";
-	}
-	
+    @GetMapping("/orders")
+    public String orderPage(Principal p, Model m, HttpSession session) {
+        UserDtls user = getLoggedInUserDetails(p);
+        try {
+            List<Cart> carts = cartService.getCartsByUser(user.getId());
+            m.addAttribute("carts", carts);
+            if (carts.size() > 0) {
+                Integer quantity = carts.get(carts.size() - 1).getQuantity();
+                Double totalOrderPrice = carts.get(carts.size() - 1).getTotalOrderPrice();
+                m.addAttribute("quantity", quantity);
+                m.addAttribute("totalOrderPrice", totalOrderPrice);
+            }
+            return "/user/order";
+
+        } catch (ResourceNotFoundException e) {
+            session.setAttribute("error", "Lỗi: Người dùng không tồn tại hoặc tài nguyên liên quan không tìm thấy.");
+            return "redirect:/user/";
+
+        } catch (Exception e) {
+            session.setAttribute("error", "Đã xảy ra lỗi không mong muốn khi tải trang đặt hàng.");
+            return "redirect:/user/cart";
+        }
+    }
+
+
+    @PostMapping("/save-order")
+    public String saveOrder(@ModelAttribute OrderRequest request, Principal p, RedirectAttributes redirectAttributes) {
+        UserDtls user = getLoggedInUserDetails(p);
+
+        try {
+            orderService.saveOrder(user.getId(), request);
+            return "redirect:/user/success";
+
+        } catch (ResourceNotFoundException | InsufficientStockException e) {
+            redirectAttributes.addFlashAttribute("error", "Lỗi đặt hàng: " + e.getMessage());
+            return "redirect:/user/orders";
+
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Lỗi giao dịch không mong muốn.");
+            return "redirect:/user/orders";
+        }
+    }
+
 	@GetMapping("/success")
 	public String loadSuccess() {
-		
+
 		return "/user/success";
 	}
-	
-	
-	@GetMapping("/user-orders")
-	public String myOrder(Model m, Principal p) {
-		UserDtls loginUser = getLoggedInUserDetails(p);
-		List<ProductOrder> orders = orderService.getOrdersByUser(loginUser.getId());
-		m.addAttribute("orders", orders);
-		return "/user/my_orders";
-	}
-	
-	
-	@GetMapping("/update-status")
-	public String updateOrderStatus(@RequestParam Integer id, @RequestParam Integer st, HttpSession session) {
 
-		OrderStatus[] values = OrderStatus.values();
-		String status = null;
+    @GetMapping("/user-orders")
+    public String myOrder(Model m, Principal p, HttpSession session) {
+        try {
+            UserDtls loginUser = getLoggedInUserDetails(p); // Hàm này có thể ném lỗi
+            List<ProductOrder> orders = orderService.getOrdersByUser(loginUser.getId());
+            m.addAttribute("orders", orders);
+            return "/user/my_orders";
 
-		for (OrderStatus orderSt : values) {
-			if (orderSt.getId().equals(st)) {
-				status = orderSt.getName();
-			}
-		}
+        } catch (ResourceNotFoundException e) {
+            session.setAttribute("error", "Lỗi truy cập: Tài khoản không hợp lệ.");
+            return "redirect:/user/";
 
-		ProductOrder updateOrder = orderService.updateOrderStatus(id, status);
+        } catch (Exception e) {
+            session.setAttribute("error", "Đã xảy ra lỗi khi tải lịch sử đơn hàng.");
+            return "redirect:/user/";
+        }
+    }
 
-		if (!ObjectUtils.isEmpty(updateOrder)) {
-			session.setAttribute("succMsg", "Status Updated");
-		} else {
-			session.setAttribute("errorMsg", "status not updated");
-		}
-		return "redirect:/user/user-orders";
-	}
+    @GetMapping("/update-status")
+    public String updateOrderStatus(@RequestParam Integer id, @RequestParam Integer st, HttpSession session) {
+        OrderStatus[] values = OrderStatus.values();
+        String status = null;
+        for (OrderStatus orderSt : values) {
+            if (orderSt.getId().equals(st)) {
+                status = orderSt.getName();
+                break;
+            }
+        }
+
+        try {
+            if (status == null) {
+                session.setAttribute("error", "Mã trạng thái không hợp lệ.");
+                return "redirect:/user/user-orders";
+            }
+            ProductOrder updateOrder = orderService.updateOrderStatus(id, status);
+
+            if (!ObjectUtils.isEmpty(updateOrder)) {
+                session.setAttribute("success", "Cập nhật thành công");
+            } else {
+                session.setAttribute("error", "Cập nhật thất bại. Đơn hàng không tìm thấy hoặc lỗi nội bộ.");
+            }
+
+        } catch (ResourceNotFoundException e) {
+            session.setAttribute("error", "Lỗi: Không tìm thấy đơn hàng cần cập nhật.");
+
+        } catch (Exception e) {
+            session.setAttribute("error", "Lỗi hệ thống khi cập nhật trạng thái.");
+        }
+
+        return "redirect:/user/user-orders";
+    }
 
 }
 

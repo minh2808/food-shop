@@ -118,7 +118,9 @@ public class HomeController {
 		Product productById = productService.getProductById(id);
 		m.addAttribute("product", productById);
 
+
 		System.out.println(productById.getImage());
+
 
 		return "view_product";
 	}
@@ -135,8 +137,8 @@ public class HomeController {
 		if (existsEmail) {
 
 
-			session.setAttribute("errorMsg", "Email đã tồn tại");
 
+			session.setAttribute("errorMsg", "Email đã tồn tại");
 		} else {
 			UserDtls saveUser = userService.saveUser(user);
 
@@ -144,9 +146,11 @@ public class HomeController {
 				
 
 
+
 				session.setAttribute("succMsg", "Đăng kí thành công");
 			} else {
 				session.setAttribute("errorMsg", "Có lỗi ở phía server");
+
 
 			}
 		}

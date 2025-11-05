@@ -21,11 +21,11 @@ $(function(){
 				required: true,
 				space: true,
 				numericOnly: true,
-<<<<<<< HEAD
+
+
 				minlength: 10,
 				maxlength: 12
-=======
->>>>>>> vinh
+
 
 			},
 			password: {
@@ -43,7 +43,7 @@ $(function(){
 				required: true,
 				all: true
 
-<<<<<<< HEAD
+
 			},
 
 			city: {
@@ -63,66 +63,13 @@ $(function(){
 
 			}, img: {
 				required: true,
-=======
->>>>>>> vinh
+
 			}
 			
 		},
 		messages:{
 			name:{
-<<<<<<< HEAD
-				required:'name required',
-				lettersonly:'invalid name'
-			},
-			email: {
-				required: 'email name must be required',
-				space: 'space not allowed',
-				email: 'Invalid email'
-			},
-			mobileNumber: {
-				required: 'mob no must be required',
-				space: 'space not allowed',
-				numericOnly: 'invalid mob no',
-				minlength: 'min 10 digit',
-				maxlength: 'max 12 digit'
-			},
 
-			password: {
-				required: 'password must be required',
-				space: 'space not allowed'
-
-			},
-			confirmpassword: {
-				required: 'confirm password must be required',
-				space: 'space not allowed',
-				equalTo: 'password mismatch'
-
-			},
-			address: {
-				required: 'address must be required',
-				all: 'invalid'
-
-			},
-
-			city: {
-				required: 'city must be required',
-				space: 'space not allowed'
-
-			},
-			state: {
-				required: 'state must be required',
-				space: 'space not allowed'
-
-			},
-			pincode: {
-				required: 'pincode must be required',
-				space: 'space not allowed',
-				numericOnly: 'invalid pincode'
-
-			},
-			img: {
-				required: 'image required',
-=======
 				required:'Yêu cầu điền',
 				lettersonly:'Tên không hợp lệ'
 			},
@@ -152,7 +99,7 @@ $(function(){
 				required: 'Yêu cầu điền',
 				all: 'Không hợp lệ'
 
->>>>>>> vinh
+
 			}
 		}
 	})
@@ -191,33 +138,15 @@ $orders.validate({
 				all: true
 
 			},
-<<<<<<< HEAD
 
-			city: {
-				required: true,
-				space: true
-
-			},
-			state: {
-				required: true,
-
-
-			},
-			pincode: {
-				required: true,
-				space: true,
-				numericOnly: true
-
-			},
-=======
->>>>>>> vinh
 			paymentType:{
 			required: true
 			}
 		},
 		messages:{
 			firstName:{
-<<<<<<< HEAD
+
+
 				required:'first required',
 				lettersonly:'invalid name'
 			},
@@ -261,9 +190,9 @@ $orders.validate({
 
 			},
 			paymentType:{
-			required: 'select payment type'
-=======
-				required:'Yêu cầu điền',
+			required: 'select payment type',
+
+
 				lettersonly:'Không hợp lệ'
 			},
 			lastName:{
@@ -288,7 +217,7 @@ $orders.validate({
 			},
 			paymentType:{
 			required: 'Chọn phương thức thanh toán'
->>>>>>> vinh
+
 			}
 		}	
 })

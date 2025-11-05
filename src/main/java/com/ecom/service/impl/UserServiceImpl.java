@@ -34,6 +34,7 @@ public class UserServiceImpl implements UserService {
 		String encodePassword = passwordEncoder.encode(user.getPassword());
 		user.setPassword(encodePassword);
 
+
 		UserDtls saveUser=userRepository.save(user);
 		return saveUser;
 	}
@@ -68,6 +69,7 @@ public class UserServiceImpl implements UserService {
 		
 		String encodePassword = passwordEncoder.encode(user.getPassword());
 		user.setPassword(encodePassword);
+
 
 		UserDtls saveUser=userRepository.save(user);
 		return saveUser;

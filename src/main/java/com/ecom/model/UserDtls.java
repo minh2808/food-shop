@@ -25,19 +25,24 @@ public class UserDtls {
 
 	private Integer id;
 
-	
+
 	private String name;
-
 	private String mobileNumber;
-
 	private String email;
-
 	private String address;
-
-
+	private String cityOrProvince;
 	private String password;
-	
 	private String role;
+	
+//	private Boolean isEnable;
+//	
+//	private Boolean accountNonLocked;
+//	
+//	private Integer failedAttempt;
+//
+//	private Date lockTime;
+	
+	
 
 
 	public String getRole() {
@@ -88,5 +93,21 @@ public class UserDtls {
 		this.address = address;
 	}
 
+
+	public String getCityOrProvince() {
+		return cityOrProvince;
+	}
+
+	public void setCityOrProvince(String cityOrProvince) {
+		this.cityOrProvince = cityOrProvince;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
 }

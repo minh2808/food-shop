@@ -51,14 +51,13 @@ public class OrderServiceImpl implements OrderService {
 			order.setPaymentType(orderRequest.getPaymentType());
 
 			OrderAddress address = new OrderAddress();
-			address.setFirstName(orderRequest.getFirstName());
-			address.setLastName(orderRequest.getLastName());
+
+			address.setFullName(orderRequest.getFullName());
 			address.setEmail(orderRequest.getEmail());
 			address.setMobileNo(orderRequest.getMobileNo());
 			address.setAddress(orderRequest.getAddress());
-			address.setCity(orderRequest.getCity());
-			address.setState(orderRequest.getState());
-			address.setPincode(orderRequest.getPincode());
+			address.setCityOrProvince(orderRequest.getCityOrProvince());
+
 
 			order.setOrderAddress(address);
 

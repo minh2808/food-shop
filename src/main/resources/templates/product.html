@@ -1,43 +1,65 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://thymeleaf.org"
- th:replace="~{base::layout(~{::section})}">
+<<<<<<< HEAD
+<html lang="vi" xmlns:th="http://thymeleaf.org"
+      th:replace="~{base::layout(~{::section})}">
 <head>
+    <title>Tất cả sản phẩm</title>
+    <style>
+        .search-container {
+            background-color: #f8f9fa;
+            padding: 30px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+        .category-sidebar .list-group-item.active {
+            background-color: #FF0000 !important; /* Màu đỏ nhấn */
+            border-color: #FF0000 !important;
+            color: white !important;
+            font-weight: bold;
+        }
+        .product-card-hover {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: none;
+            border-radius: 0.75rem;
+        }
+        .product-card-hover:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+    </style>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
 </head>
 <body>
 
     <section>
-        <div class="container-fluid bg-success p-4 mt-5">
+        <div class="container-fluid search-container">
             <div class="row">
                 <div class="col-md-8 offset-md-2">
                     <form action="search" method="get">
-                        <div class="input-group">
-                            <input type="text" class="form-control" name="ch">
-                            <button class="btn btn-light text-dark ms-3"><i class="fa-solid fa-magnifying-glass"></i>Search</button>
+                        <div class="input-group input-group-lg shadow-sm">
+                            <input type="text" class="form-control" name="ch" placeholder="Tìm kiếm món ăn...">
+                            <button class="btn btn-accent-red text-white"><i class="fa-solid fa-magnifying-glass me-2"></i>Tìm kiếm</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
 
-		
-		
+
+
 		<div class="container-fluid bg-light mt-1">
 					<div class="row">
-		
+
 						<div class="col-md-2 p-0">
-		
+
 
 							<div class="card shadow-sm p-0 mb-5 bg-body-tertiary rounded">
 								<div class="card-body">
 									<div class="list-group">
-										<p class="fs-4">Category</p>
+										<p class="fs-4">Danh mục</p>
 
-										<a href="/products" th:classappend="${paramValue==''} ? 'active bg-success':''" class="list-group-item list-group-item-action" aria-current="true"> All </a> 
+										<a href="/products" th:classappend="${paramValue==''} ? 'active bg-success':''" class="list-group-item list-group-item-action" aria-current="true"> All </a>
 										<a th:each="c:${categories}" th:href="@{'/products?category='+${c.name}}" th:classappend="${paramValue == c.name} ? 'active bg-success':''" class="list-group-item list-group-item-action ">[[${c.name}]]</a>
-										
+
 
 									</div>
 								</div>
@@ -84,7 +106,7 @@
 
 
 														<th:block th:unless="${products.size>0}">
-															<p class="fs-4 text-center mt-4 text-danger">Product Not Found</p>
+															<p class="fs-4 text-center mt-4 text-danger">Không tìm thấy sản phẩm</p>
 														</th:block>
 
 														<!-- TODO : Remove after backend implement  -->

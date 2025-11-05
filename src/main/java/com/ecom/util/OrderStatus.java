@@ -1,12 +1,14 @@
 package com.ecom.util;
 
 public enum OrderStatus {
-    IN_PROGRESS(1, "In Progress"),
-    ORDER_RECEIVED(2, "Order Received"),
-    PRODUCT_PACKED(3, "Product Packed"),
-    OUT_FOR_DELIVERY(4, "Out for Delivery"),
-    DELIVERED(5, "Delivered"),
-	CANCEL(6, "Cancelled");
+
+    IN_PROGRESS(1, "Đang tiến hành"),
+    ORDER_RECEIVED(2, "Đã nhận đơn hàng"),
+    PRODUCT_PACKED(3, "Đã đóng gói sản phẩm"),
+    OUT_FOR_DELIVERY(4, "Đang giao hàng"),
+    DELIVERED(5, "Đã giao hàng"),
+    CANCEL(6, "Đã hủy đơn hàng");
+
 
     private final Integer id;
     private final String name;

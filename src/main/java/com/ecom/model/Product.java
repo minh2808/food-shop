@@ -39,10 +39,12 @@ public class Product {
     private Double discountPrice;
 
 
+
 	private Integer stockQuantity;
 
 
 
 
 	
+
 }
