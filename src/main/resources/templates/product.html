@@ -54,8 +54,7 @@
 														<div class="col-md-3" th:each="p:${products}">
 															<div class="card shadow p-1 mb-5 ">
 																<div class="card-body ">
-<<<<<<< HEAD
-																	<img alt="" th:src="@{${p.image}}" width="100%"	height="200px">
+																	<img alt="" th:src="@{'/img/product/'+${p.image}}" width="100%"	height="200px">
 																	<p class="fs-5 text-center mt-2">[[${p.title}]]</p>
 																	<div class="row text-center">
 																	<p class="fs-6 fw-bold">
