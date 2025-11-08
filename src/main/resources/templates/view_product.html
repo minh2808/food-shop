@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="vi" xmlns:th="http://www.thymeleaf.org"
       th:replace="~{base::layout(~{::section})}">
 <head>
@@ -19,7 +18,24 @@
             padding: 15px;
             border-radius: 8px;
             margin-top: 20px;
-            border-left: 5px solid #FF0000; /* Đường viền đỏ nổi bật */
+            border-left: 5px solid #FF0000;
+        }
+        /* Style cho khối tồn kho chi tiết */
+        .stock-detail {
+            margin-top: 15px;
+            padding: 10px 15px;
+            border-radius: 6px;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        .stock-low {
+            background-color: #ffe0e0; /* Nền hồng nhạt */
+            color: #dc3545; /* Chữ đỏ */
+            border: 1px solid #dc3545;
+        }
+        .stock-ok {
+            background-color: #e9f7ef; /* Nền xanh nhạt */
+            color: #28a745; /* Chữ xanh lá */
         }
     </style>
     <meta charset="UTF-8">
@@ -69,12 +85,25 @@
                     </p>
 
                     <div class="price-display">
-                        <span class="fs-2 fw-bold accent-color me-3">[[${@commonServiceImpl.formatVnd(product.discountPrice)}]]</span>
-                        <span class="fs-4 text-decoration-line-through text-secondary me-2">[[${@commonServiceImpl.formatVnd(product.discountPrice)}]]</span>
+                        <span class="fs-2 fw-bold accent-color me-3">[[${@commonServiceImpl.formatVnd(product.discountPrice)}]]₫</span>
+                        <span class="fs-4 text-decoration-line-through text-secondary me-2">[[${@commonServiceImpl.formatVnd(product.price)}]]₫</span>
                         <span class="badge bg-danger fs-5">Giảm [[${product.discount}]]%</span>
                     </div>
 
-
+                    <div class="stock-detail" 
+                         th:classappend="${product.stockQuantity <= 5} ? 'stock-low' : 'stock-ok'">
+                        
+                        <th:block th:if="${product.stockQuantity > 0}">
+                            <i class="fa-solid fa-boxes-stacked me-2"></i>
+                            Còn hàng: <span th:text="${product.stockQuantity}" class="fw-bolder"></span> sản phẩm
+                            <span th:if="${product.stockQuantity <= 5}" class="ms-2">(Sắp hết hàng!)</span>
+                        </th:block>
+                        
+                        <th:block th:unless="${product.stockQuantity > 0}">
+                            <i class="fa-solid fa-circle-xmark me-2"></i> 
+                            Hết hàng (Tạm thời không đặt được)
+                        </th:block>
+                    </div>
                     <div class="mt-5 d-grid">
                         <th:block th:if="${user==null}">
                             <a href="/signin" class="btn btn-accent-red btn-lg">
@@ -92,9 +121,6 @@
             </div>
         </div>
     </div>
-
-
 </section>
-
 </body>
 </html>

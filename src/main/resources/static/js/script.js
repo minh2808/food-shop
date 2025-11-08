@@ -46,22 +46,12 @@ $(function(){
 
 			},
 
-			city: {
+			cityOrProvince: {
 				required: true,
 				space: true
 
 			},
-			state: {
-				required: true,
-
-
-			},
-			pincode: {
-				required: true,
-				space: true,
-				numericOnly: true
-
-			}, img: {
+			img: {
 				required: true,
 
 			}
@@ -160,11 +150,11 @@ $orders.validate({
 				email: 'Invalid email'
 			},
 			mobileNo: {
-				required: 'mob no must be required',
-				space: 'space not allowed',
-				numericOnly: 'invalid mob no',
-				minlength: 'min 10 digit',
-				maxlength: 'max 12 digit'
+				required: 'Số điện thoại yêu cầu',
+				space: 'Không được phép có dấu cách',
+				numericOnly: 'Số điện thoại không hợp lệ',
+				minlength: 'ít nhất 10 chữ số',
+				maxlength: 'nhiều nhất 12 chữ số'
 			}
 		   ,
 			address: {

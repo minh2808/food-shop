@@ -29,9 +29,14 @@
                 <li class="nav-item"><a class="nav-link" href="/products">Sản phẩm</a></li>
 
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"> Danh mục </a>
-                    <ul class="dropdown-menu dropdown-menu-dark">
-                        <li th:each="c:${categories}"><a class="dropdown-item" th:href="@{'/products?category='+${c.name}}">[[${c.name}]]</a></li>
+                    <a class="nav-link dropdown-toggle" href="/products" role="button" data-bs-toggle="dropdown" aria-expanded="false" id="categoryDropdown">
+                        Danh mục yêu thích
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="categoryDropdown">
+                        <li><a class="dropdown-item" href="/products?category=Kem">Kem</a></li>
+                        <li><a class="dropdown-item" href="/products?category=Món Mặn">Món Mặn</a></li>
+                        <li><a class="dropdown-item" href="/products?category=Pizza">Pizza</a></li>
+                        <li><a class="dropdown-item" href="/products?category=Món Chay">Món Chay</a></li>
                     </ul>
                 </li>
 
@@ -40,8 +45,6 @@
 
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center">
 
-                <li class="nav-item d-none d-lg-block"><a class="nav-link text-white-50" href="#">Về chúng tôi</a></li>
-                <li class="nav-item d-none d-lg-block"><a class="nav-link text-white-50" href="#">Trợ giúp</a></li>
 
                 <th:block th:if="${user==null}">
                     <li class="nav-item d-none d-lg-block">

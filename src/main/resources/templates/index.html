@@ -25,11 +25,17 @@
             <p class="lead mb-4 text-muted" style="max-width: 450px;">Khám phá những món ăn hấp dẫn, được chế biến thủ công và giao đến tay bạn chỉ trong nháy mắt!</p>
 
             <div class="mb-4 w-100">
-                <div class="input-group input-group-lg shadow-sm mx-auto mb-3" style="max-width: 450px;">
-                    <input type="text" class="form-control" placeholder="Nhập món ăn...">
-                    <button class="btn btn-accent-red text-white">Tìm</button>
-                </div>
+                <form action="/search" method="get">
+                    <div class="input-group input-group-lg shadow-sm mx-auto mb-3" style="max-width: 450px;">
+                        <input type="text" class="form-control" name="ch" placeholder="Nhập món ăn...">
+                        <button class="btn btn-accent-red text-white" type="submit">
+                            <i class="fa-solid fa-magnifying-glass me-2"></i> Tìm
+                        </button>
+                    </div>
+                </form>
             </div>
+
+
 
             <a href="/products" class="btn btn-accent-red btn-lg shadow-sm">
                 <i class="fa-solid fa-basket-shopping me-2"></i>Khám phá Menu
@@ -55,7 +61,7 @@
                         <h5 class="card-title mb-2 text-truncate">
                             <a th:href="@{'/viewProduct/'+${p.id}}" class="text-decoration-none text-dark">[[${p.title}]]</a>
                         </h5>
-                        <span class="fw-bold accent-color fs-5">[[${p.discountPrice}]]₫</span>
+                        <span class="fw-bold accent-color fs-5">[[${#numbers.formatDecimal(p.discountPrice, 0, 0)}]]₫</span>
                     </div>
                 </div>
             </div>
