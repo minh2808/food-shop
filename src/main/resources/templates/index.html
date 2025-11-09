@@ -22,7 +22,7 @@
                 <span class="sub-title-line">GIAO HÀNG TẬN NƠI</span>
             </h1>
 
-            <p class="lead mb-4 text-muted" style="max-width: 450px;">Khám phá những món ăn hấp dẫn, được chế biến thủ công và giao đến tay bạn chỉ trong nháy mắt!</p>
+            <p class="lead mb-4 text-muted" style="max-width: 450px;">Khám phá những món ăn hấp dẫn, được chế biến tinh sảo và giao đến tay bạn chỉ trong nháy mắt!</p>
 
             <div class="mb-4 w-100">
                 <form action="/search" method="get">
@@ -61,8 +61,11 @@
                         <h5 class="card-title mb-2 text-truncate">
                             <a th:href="@{'/viewProduct/'+${p.id}}" class="text-decoration-none text-dark">[[${p.title}]]</a>
                         </h5>
-                        <span class="fw-bold accent-color fs-5">[[${#numbers.formatDecimal(p.discountPrice, 0, 0)}]]₫</span>
-                    </div>
+                        <div>
+                            <span class="fw-bold accent-color fs-5">[[${@commonServiceImpl.formatVnd(p.discountPrice)}]]₫</span> 
+                            <span class="text-secondary text-decoration-line-through ms-2">[[${@commonServiceImpl.formatVnd(p.price)}]]₫</span>
+                        </div>
+                        </div>
                 </div>
             </div>
         </div>

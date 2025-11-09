@@ -171,27 +171,33 @@
                                             
                                             <div class="text-center mb-3">
                                                 <p class="mb-0">
-                                                    <span class="fs-4 fw-bold accent-color me-2"> [[${#numbers.formatDecimal(p.discountPrice, 0, 0)}]]₫ </span>
-                                                    <span class="text-decoration-line-through text-secondary"> [[${#numbers.formatDecimal(p.price, 0, 0)}]]₫ </span>    
+                                                    <span class="fs-4 fw-bold accent-color me-2"> [[${@commonServiceImpl.formatVnd(p.discountPrice)}]]₫ </span>
+                                                    <span class="text-decoration-line-through text-secondary"> [[${@commonServiceImpl.formatVnd(p.price)}]]₫ </span> 
                                                 </p>
-                                                <span class="badge bg-danger fs-6 p-2">Giảm [[${p.discount}]]%</span>
                                             </div>
                                             
-                                            <div class="text-center">
-                                                <p class="stock-info mb-0" 
-                                                th:classappend="${p.stockQuantity <= 5} ? 'low-stock' : 'in-stock'">
-                                                    <i class="fa-solid fa-box icon me-1"></i>
-                                                    <span th:if="${p.stockQuantity > 0}">
-                                                        Còn lại: <span th:text="${p.stockQuantity}"></span> 
-                                                    </span>
-                                                    <span th:unless="${p.stockQuantity > 0}" class="fw-bold">
-                                                        Hết hàng
-                                                    </span>
-                                                </p>
+                                            <div class="d-flex justify-content-between align-items-center px-2 mb-3">
+                                                
+                                                <div>
+                                                    <span class="badge bg-danger fs-6 p-2">Giảm [[${p.discount}]]%</span>
+                                                </div>
+                                                
+                                                <div>
+                                                    <p class="stock-info mb-0" 
+                                                    th:classappend="${p.stockQuantity <= 5} ? 'low-stock' : 'in-stock'">
+                                                        <i class="fa-solid fa-box icon me-1"></i>
+                                                        <span th:if="${p.stockQuantity > 0}">
+                                                            Còn lại: <span th:text="${p.stockQuantity}"></span> 
+                                                        </span>
+                                                        <span th:unless="${p.stockQuantity > 0}" class="fw-bold">
+                                                            Hết hàng
+                                                        </span>
+                                                    </p>
+                                                </div>
                                             </div>
                                             
                                             <div class="d-grid mt-3 px-2">
-                                                <a th:href="@{'/viewProduct/'+${p.id}}" class="btn btn-accent-red rounded-pill">Xem chi tiết</a>
+                                                <a th:href="@{'/viewProduct/'+${p.id}}" class="btn btn-outline-dark btn-sm rounded-pill">Xem chi tiết</a>
                                             </div>
                                         </div>
                                     </div>

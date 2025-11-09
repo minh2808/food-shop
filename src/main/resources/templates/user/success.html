@@ -1,41 +1,48 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-	th:replace="~{base::layout(~{::section})}">
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{base::layout(~{::section})}">
 <head>
-<meta charset="ISO-8859-1">
-<title>Insert title here</title>
-
+    <title>Đặt hàng Thành công</title>
+    <meta charset="UTF-8">
 </head>
 <body>
-	<section>
-     <div class="container p-5 mt-3">
-			<div class="row">
-				<div class="col-md-8 offset-md-2 text-center">
-					
-			   	<div class="text-center mt-5">
-					    <img alt="" src="/img/user/success.png" width="80px" height="80px">
-					</div>  
-					
-		   <!--			<i class="fa-solid fa-circle-check fa-5x text-success mt-5"></i>    -->
-												
-					<h4 class="text-center">Your Order Successfully</h4>
-					<p class="fs-5 text-center">with in off hour your order will delivered in your Address</p>
-					
-					<div class="text-center">
-			         	<img alt="" src="/img/user/deli.jpg" width="430px" height="300px">
-					</div>
-					
-					<div class="text-center">
-								         	<a href="/" class="btn btn-warning me-2">Home</a>
-											<a href="/user/user-orders" class="btn btn-secondary ms-2">Your Order</a>
-										</div>
-										
-				</div>
-			</div>
-		</div> 
-		
-		
-		
-	</section>
+    <section>
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-md-8 col-lg-6">
+                    
+                    <div class="success-box text-center">
+                        
+                        <i class="fa-solid fa-circle-check fa-5x success-icon"></i> 
+                        
+                        <h2 class="success-title">
+                            CẢM ƠN BẠN!
+                        </h2>
+                        <h4 class="fw-bold accent-color">
+                            Đơn hàng của bạn đã được đặt thành công!
+                        </h4>
+                        <p class="lead text-muted mt-3">
+                            Chúng tôi đang chuẩn bị đơn hàng và sẽ sớm giao đến tay bạn.
+                        </p>
+                        
+                        <div class="text-center">
+                            <img src="/img/user/deli.jpg" class="delivery-image" alt="Giao hàng" width="400px" height="280px">
+                        </div>
+                        
+                        <div class="mt-4">
+                            <a href="/" class="btn btn-accent-red btn-lg me-3">
+                                <i class="fa-solid fa-house me-2"></i> Quay về Trang chủ
+                            </a>
+                            
+                            <a href="/user/user-orders" class="btn btn-outline-secondary btn-lg">
+                                Đơn hàng của bạn
+                            </a>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div> 
+    </section>
 </body>
 </html>

@@ -57,14 +57,14 @@ public class CartServiceImpl implements CartService {
 			// Nếu tồn tại tăng số lượng
 			int newQuantity = existingCart.getQuantity() + 1;
 			checkStockAvailability(stockAvailable, newQuantity); // Kiểm tra số lượng sau khi tăng
-			cartToSave = updateExistingCart(existingCart, product); // Logic tăng số lượng đã chuyển xuống hàm hỗ trợ
+			cartToSave = updateExistingCart(existingCart, product); // tăng số lượng 
 		}
 
 		// Lưu DATABASE
 		return cartRepository.save(cartToSave);
 	}
 
-	// Lấy tất cả các mục giỏ hàng của một người dùng cụ thể
+	// Lấy tất cả các mục giỏ hàng của một người dùng
 	@Override
 	public List<Cart> getCartsByUser(Integer userId) {
 		// Tìm người dùng
@@ -136,6 +136,38 @@ public class CartServiceImpl implements CartService {
 		cartRepository.save(cart);
 	}
 
+	@Override
+    public void updateQuantityByInput(Integer cartId, Integer newQuantity) {
+        if (newQuantity == null || newQuantity < 0) {
+            return;  				// nhập sai
+        }
+        Cart cart = cartRepository.findById(cartId)
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy giỏ hàng với ID là: " + cartId));
+
+        if (newQuantity == 0) {
+            cartRepository.delete(cart);
+            return;
+        }
+        Integer stockAvailable = cart.getProduct().getStockQuantity();
+        checkStockAvailability(stockAvailable, newQuantity);
+        cart.setQuantity(newQuantity);
+        double price = cart.getProduct().getDiscountPrice();
+        cart.setTotalPrice(newQuantity * price);
+        
+        cartRepository.save(cart);
+    }
+	
+	@Override
+    public void removeCartItem(Integer cartId) {
+        Cart cart = cartRepository.findById(cartId)
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy mục giỏ hàng với ID là: " + cartId));
+        // Thực hiện xóa
+        cartRepository.delete(cart);
+    }
+
+
+
+	
 	// HÀM HỖ TRỢ
 	// Tạo một mục Cart mới với số lượng mặc định là 1
 	private Cart createNewCart(UserDtls user, Product product) {

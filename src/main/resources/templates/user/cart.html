@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
 	th:replace="~{base::layout(~{::section})}">
 <head>
-<meta charset="ISO-8859-1">
+<meta charset="UTF-8">
 <title>Insert title here</title>
 
 
@@ -10,7 +10,7 @@
 </head>
 <body>
 	<section>
-		<!-- Hi?n popup khi c� l?i -->
+		<!-- Hi?n popup khi c� l?i -->
 		<div th:if="${error}" class="alert alert-danger" id="errorPopup" style="display:none;">
 			[[${error}]]
 		</div>
@@ -20,74 +20,113 @@
 		</div>
 
 
-		<div class="container-fluid mt-5 p-5">
+		<div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-md-10">
+                    <div class="card shadow-lg border-0 rounded-3">
+                        
+                        <div class="card-header text-center bg-white border-bottom">
+                            <h2 class="fs-3 fw-bold accent-color">Giỏ hàng</h2>
+                            
+                            <div th:if="${session.succMsg}" class="alert alert-success text-center mt-3">
+                                <i class="fa-solid fa-check me-2"></i> [[${session.succMsg}]]
+                                <th:block th:text="${@commonServiceImpl.removeSessionMessage()}"></th:block>
+                            </div>
+                            <div th:if="${session.errorMsg}" class="alert alert-danger text-center mt-3">
+                                <i class="fa-solid fa-circle-exclamation me-2"></i> [[${session.errorMsg}]]
+                                <th:block th:text="${@commonServiceImpl.removeSessionMessage()}"></th:block>
+                            </div>
+                        </div>
+                        
+                        <div class="card-body p-4">
+                            
+                            <th:block th:if="${carts != null and carts.size() > 0}">
+                            <table class="table table-hover cart-table">
+                                <thead>
+                                    <tr>
+                                        <th>STT</th>
+                                        <th>Hình ảnh</th>
+                                        <th>Tên sản phẩm</th>
+                                        <th>Giá (1 SP)</th>
+                                        <th class="text-center">Số lượng</th>
+                                        <th>Thành tiền</th>
+                                        <th>Hủy</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="cart,c:${carts}">
+                                        <th scope="row" class="align-middle">[[${c.count}]]</th> 
+                                        <td class="align-middle">
+                                            <img th:src="@{'/img/product/'+${cart.product.image}}" alt="Ảnh sản phẩm" width="60px" height="60px" class="rounded">
+                                        </td>
+                                        <td class="align-middle">[[${cart.product.title}]]</td>
+                                        <td class="align-middle">[[${@commonServiceImpl.formatVnd(cart.product.discountPrice)}]]₫</td>
+                                        
+                                        <td class="text-center align-middle">
+                                            <div class="d-inline-flex align-items-center">
+                                                
+                                                <a th:href="@{'/user/cartQuantityUpdate?sy=de&cid='+${cart.id}}" class="btn-qty text-decoration-none">
+                                                    <i class="fa-solid fa-minus"></i>
+                                                </a>
+                                                
+                                                <form th:action="@{'/user/cartQuantityUpdate'}" method="get" class="d-inline-block mx-1">
+													<input type="hidden" name="cid" th:value="${cart.id}">
+													<input type="hidden" name="sy" value="set"> 
+													
+													<input type="number" 
+														name="newQuantity" 
+														th:value="${cart.quantity}" 
+														min="1"
+														max="100" 
+														class="form-control text-center p-1 no-spinner"
+														style="width: 50px; font-weight: bold; height: 30px;"
+														onchange="this.form.submit()">
+												</form>
 
-			<div class="card card-sh">
-				<div class="card-header text-center">
-					<p class="fs-4">Cart Page</p>
-					<th:block th:if="${session.succMsg}">
-						<p class="text-success fw-bold">[[${session.succMsg}]]</p>
-
-
-						<th:block th:text="${@commonServiceImpl.removeSessionMessage()}"></th:block>
-
-
-					</th:block>
-
-					<th:block th:if="${session.errorMsg}">
-						<p class="text-danger fw-bold">[[${session.errorMsg}]]</p>
-
-
-						<th:block th:text="${@commonServiceImpl.removeSessionMessage()}"></th:block>
-
-					</th:block>
-				</div>
-				<div class="card-body">
-					<table class="table">
-						<thead>
-							<tr>
-								<th scope="col">Sl No</th>
-								<th scope="col">Image</th>
-								<th scope="col">Product Name</th>
-								<th scope="col">Price</th>
-								<th scope="col" class="text-center">Quantity</th>
-								<th scope="col">Total Price</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr th:each="cart,c:${carts}">
-								<th scope="row">[[${c.count}]]</th>
-
-
-								<td><img th:src="@{'/img/product/'+${cart.product.image}}" width="70px" height="70px"></td>
-								<td>[[${cart.product.title}]]</td>
-								<td>[[${@commonServiceImpl.formatVnd(cart.product.discountPrice)}]]</td>
-								<td class="text-center"><a th:href="@{'/user/cartQuantityUpdate?sy=de&cid='+${cart.id}}"> <i class="fa-solid fa-minus"></i>
-								</a> [ [[${cart.quantity}]] ] <a th:href="@{'/user/cartQuantityUpdate?sy=in&cid='+${cart.id}}"> <i class="fa-solid fa-plus"></i></a> </td>
-								<td>[[${@commonServiceImpl.formatVnd(cart.totalPrice)}]] </td>
-
-
-							</tr>
-						    
-							<tr>
-								<td colspan="4"></td>
-								<td class="fw-bold">Total Price</td>
-								<td class="fw-bold">[[${@commonServiceImpl.formatVnd(totalOrderPrice) }]] </td>
-
-							</tr>  
-
-						</tbody>
-					</table>
-					<div class="text-center">
-						<a href="/user/orders" class="btn btn-warning"> Proceed Payment</a>
-					</div> 
-				</div>
-			</div>
-				
-			
-				
-				
-			</div>
+                                                
+                                                <a th:href="@{'/user/cartQuantityUpdate?sy=in&cid='+${cart.id}}" class="btn-qty text-decoration-none">
+                                                    <i class="fa-solid fa-plus"></i>
+                                                </a>
+                                            </div>
+                                        </td>
+                                        
+                                        <td class="fw-bold accent-color align-middle">[[${@commonServiceImpl.formatVnd(cart.totalPrice)}]]₫</td>
+                                        
+                                        <td class="align-middle">
+                                            <a th:href="@{'/user/removeCart/'+${cart.id}}" class="btn btn-sm btn-danger">
+                                                <i class="fa-solid fa-trash-can"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="table-light">
+                                        <td colspan="4" class="border-end"></td>
+                                        <td class="fw-bold fs-5 text-end border-end">Tổng cộng:</td>
+                                        <td class="fw-bold fs-5 accent-color">[[${@commonServiceImpl.formatVnd(totalOrderPrice)}]]₫ </td>
+                                        <td></td>
+                                    </tr> 
+                                </tbody>
+                            </table>
+                            
+                           <div class="text-center mt-4">
+								<a href="/user/orders" class="btn btn-proceed btn-lg shadow-sm"> 
+									<i class="fa-solid fa-wallet me-2"></i> 
+									Tiến hành Thanh toán
+								</a>
+							</div>
+                            
+                            </th:block>
+                            
+                            <th:block th:unless="${carts != null and carts.size() > 0}">
+                                <div class="alert alert-info text-center fs-5 p-4 mt-3">
+                                    <i class="fa-solid fa-info-circle me-2"></i> Giỏ hàng của bạn đang trống!
+                                </div>
+                            </th:block>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
 
 		<script>

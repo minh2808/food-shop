@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.ecom.exception.ResourceNotFoundException;
+import com.ecom.exception.InsufficientStockException;
+
 import com.ecom.model.Category;
 import com.ecom.model.Product;
 import com.ecom.model.UserDtls;
@@ -117,11 +120,7 @@ public class HomeController {
 	public String product(@PathVariable int id, Model m) {
 		Product productById = productService.getProductById(id);
 		m.addAttribute("product", productById);
-
-
 		System.out.println(productById.getImage());
-
-
 		return "view_product";
 	}
 	
@@ -135,8 +134,6 @@ public class HomeController {
 		Boolean existsEmail = userService.existsEmail(user.getEmail());
 		
 		if (existsEmail) {
-
-
 
 			session.setAttribute("errorMsg", "Email đã tồn tại");
 		} else {

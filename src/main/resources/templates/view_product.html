@@ -11,7 +11,7 @@
         .product-image {
             border-radius: 10px;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-            object-fit: cover;
+            object-fit: flex;
         }
         .price-display {
             background-color: #f7f7f7;
@@ -21,30 +21,24 @@
             border-left: 5px solid #FF0000;
         }
         /* Style cho khối tồn kho chi tiết */
-        .stock-detail {
-            margin-top: 15px;
-            padding: 10px 15px;
-            border-radius: 6px;
-            font-size: 1.1rem;
-            font-weight: 600;
-        }
-        .stock-low {
-            background-color: #ffe0e0; /* Nền hồng nhạt */
-            color: #dc3545; /* Chữ đỏ */
-            border: 1px solid #dc3545;
-        }
-        .stock-ok {
-            background-color: #e9f7ef; /* Nền xanh nhạt */
-            color: #28a745; /* Chữ xanh lá */
-        }
+        
     </style>
     <meta charset="UTF-8">
 </head>
 <body>
 <section>
+
+    <div th:if="${error}" class="alert alert-danger" id="errorPopup" style="display:none;">
+		[[${error}]]
+    </div>
+
+	<div th:if="${success}" class="alert alert-success" id="successPopup" style="display:none;">
+		[[${success}]]
+	</div>
+
     <div class="container product-detail-container">
 
-        <div class="col-md-10 offset-md-1 p-4 bg-white rounded-3 shadow-lg">
+        <div class="col-md-10 offset-md-1 p-4 bg-white rounded-3 shadow-lg"> 
             <h1 class="text-center mb-5 fw-bold accent-color">Chi tiết sản phẩm</h1>
 
             <div class="row">
@@ -66,7 +60,7 @@
                 </div>
 
                 <div class="col-md-5">
-                    <img alt="Hình ảnh sản phẩm" th:src="@{'/img/product/'+${product.image}}" class="product-image" width="100%" height="450px">
+                    <img alt="Hình ảnh sản phẩm" th:src="@{'/img/product/'+${product.image}}" class="product-image" width="100%" height="400px">
                 </div>
 
                 <div class="col-md-7 ps-md-5">
@@ -121,6 +115,22 @@
             </div>
         </div>
     </div>
+
+    <script>
+		document.addEventListener("DOMContentLoaded", function() {
+			const errorPopup = document.getElementById("errorPopup");
+			if (errorPopup) {
+				Swal.fire({
+				icon: "error",
+				title: "",
+				text: errorPopup.textContent.trim(),
+				confirmButtonText: "OK"
+			});
+			}
+		});
+	</script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 </section>
 </body>
 </html>

@@ -1,139 +1,113 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-	th:replace="~{base::layout(~{::section})}">
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{base::layout(~{::section})}">
 <head>
-<meta charset="ISO-8859-1">
-<title>Insert title here</title>
-
+    <title>Xác nhận Đặt hàng</title>
+    <meta charset="UTF-8">
 </head>
 <body>
-	<section>
+    <section>
+        
+        <div class="container checkout-flex-wrapper">
+            <div class="col-lg-10"> <div class="checkout-main-content">
+                    
+                    <div th:if="${error}" class="alert alert-danger text-center mb-4">
+                        <i class="fa-solid fa-triangle-exclamation me-2"></i> [[${error}]]
+                    </div>
+                    <div th:if="${success}" class="alert alert-success text-center mb-4">
+                        <i class="fa-solid fa-check me-2"></i> [[${success}]]
+                    </div>
+                    
+                    <form action="/user/save-order" method="post" id="orders" novalidate>
+                        <div class="row g-5 justify-content-center"> <div class="col-md-6">
+                                <div class="address-card">
+                                    <p class="fs-4 fw-bold accent-color mb-4 text-center">Thông tin Giao hàng</p>
+                                    <hr class="my-2">
+                                    
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold">Họ và Tên người nhận</label> 
+                                        <input type="text" name="fullName" required th:value="${user.name}"
+                                            class="form-control form-control-lg" placeholder="Họ và Tên">
+                                    </div>
 
-		<div class="container mt-5 p-5">
-			<form action="/user/save-order" method="post" id="orders" novalidate>
-				<div class="row">
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold">Email</label> 
+                                        <input type="email" name="email" required th:value="${user.email}"
+                                            class="form-control form-control-lg" placeholder="Email">
+                                    </div>
 
-					<div class="col-md-6  ">
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold">Điện thoại</label> 
+                                        <input type="text" name="mobileNo" required th:value="${user.mobileNumber}"
+                                            class="form-control form-control-lg" placeholder="Số điện thoại">
+                                    </div>
 
-						
-					    <!--       <p>First Name: <span th:text="${user.name}"></span></p>
-						      
-						        <p>Email: <span th:text="${user.email}"></span></p>
-						        <p>Mobile No: <span th:text="${user.mobileNumber}"></span></p>
-								<p>Address: <span th:text="${user.address}"></span></p>
-								<p>City: <span th:text="${user.city}"></span></p>
-								
-						
-						   
-						        <p>State: <span th:text="${user.state}"></span></p>
-						        <p>Pincode: <span th:text="${user.pincode}"></span></p>        -->
-                   
-						<div class="mb-3 row">
-							<p class="text-center fs-4">Billing Address</p>
-							<hr>
-							<div class="col p-1">
-								<label>First Name</label> <input type="text" name="firstName" required
-									class="form-control mt-1">
-							</div>
-							<div class="col p-1">
-								<label>Last Name</label> <input type="text" name="lastName" required
-									class="form-control mt-1">
-							</div>
-						</div>
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold">Địa chỉ chi tiết</label> 
+                                        <input type="text" name="address" required th:value="${user.address}"
+                                            class="form-control form-control-lg" placeholder="Số nhà, đường, hẻm">
+                                    </div>
+                                    
+                                    <div class="mb-3 row g-2">
+                                        <div class="col p-1">
+                                            <label class="form-label fw-bold">Tỉnh / Thành phố</label> 
+                                            <input type="text" name="cityOrProvince" required th:value="${user.cityOrProvince}"
+                                                class="form-control form-control-lg" placeholder="Tỉnh/Thành phố">
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
 
-						<div class="mb-3 row">
-							<div class="col p-1">
-								<label>Email</label> <input type="email" name="email" required
-									class="form-control col">
-							</div>
-							<div class="col p-1">
-								<label>Mobile Number</label> <input type="text" name="mobileNo" required
-									class="form-control col ms-2">
-							</div>
-						</div>
+                            <div class="col-md-6">
+                                
+                                <div class="summary-card">
+                                     <p class="fs-4 fw-bold mb-4 text-center">Tổng quan Đơn hàng</p>
+                                     <hr class="my-2">
+                                     <table class="table table-borderless summary-table">
+                                         <tbody>
+                                             <tr>
+                                                 <td class="fw-bold">Tổng số lượng</td>
+                                                 <td>:</td>
+                                                 <td class="fw-bold"> [[${carts != null ? carts.size() : 0}]] món </td> 
+                                             </tr>
+                                             <tr>
+                                                 <td class="fw-bold">Phí vận chuyển</td>
+                                                 <td>:</td>
+                                                 <td class="text-success fw-bold"> Miễn phí</td>
+                                             </tr>
+                                             <tr>
+                                                <td class="fw-bold fs-5">Tổng tiền thanh toán</td>
+                                                <td>:</td>
+                                                <td class="final-price"> [[${@commonServiceImpl.formatVnd(totalOrderPrice)}]]₫ </td>
+                                             </tr>
+                                         </tbody>
+                                     </table>
+                                     
+                                     <hr>
+                                     
+                                     <div class="mb-4">
+                                        <label class="form-label fw-bold">Chọn Phương thức Thanh toán</label> 
+                                        <select required name="paymentType" class="form-control form-control-lg">
+                                            <option value="">-- Chọn phương thức --</option>
+                                            <option value="COD">Thanh toán khi nhận hàng (COD)</option>
+                                            <option value="ONLINE">Thanh toán Trực tuyến</option>
+                                        </select>
+                                     </div>
+                                     
+                                     <button type="submit" class="btn btn-accent-red btn-lg w-100 shadow">
+                                         <i class="fa-solid fa-credit-card me-2"></i> Xác nhận Đặt hàng
+                                     </button>
+                                </div>
+                                
+                            </div>
 
-						<div class="mb-3 row">
-							<div class="col p-1">
-								<label>Address</label> <input type="text" name="address" required
-									class="form-control col">
-							</div>
-							<div class="col p-1">
-								<label>City</label> <input type="text" name="city" required
-									class="form-control col ms-2">
-							</div>
-						</div>
-						<div class="mb-3 row">
-							<div class="col p-1">
-								<label>State</label> <input type="text" name="state" required
-									class="form-control col">
-							</div>
-							<div class="col p-1">
-								<label>Pincode</label> <input type="number" name="pincode" required
-									class="form-control col ms-2">
-							</div>
-						</div>    
-						<!-- </form> -->
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
 
-					</div>
-					<div class="col-md-6">
-						<p class="text-center fs-4">Payment Type</p>
-						<hr>
-						<div class="card">
-							<div class="card-body">
-								<table class="table table-borderless">
-									<tbody>
-										<tr>
-											<td class="fw-bold">Total Quentity</td>
-											<td>:</td>
-											<td> [[${quantity}]] </td>
-										</tr>
-										
-										<tr>
-											<td class="fw-bold">Shipping</td>
-											<td>:</td>
-											<td> Free</td>
-										</tr>
-										
-										<tr>
-								           <td class="fw-bold">Total price</td>
-										   <td>:</td>
-										   <td>&#8377;    [[${totalOrderPrice}]]</td>
-										</tr>
-									
-									</tbody>
-								</table>
-							</div>
-						</div>
-
-						<div class="card shadow p-3 mb-5 mt-2 bg-body-tertiary rounded">
-
-							<div class="card-body">
-								<!-- <form action="/login" method="post"> -->
-								<div class="mb-3">
-									<label class="form-label">Select Payment Type</label> <select required
-										name="paymentType" class="form-control">
-										<option value="">--select--</option>
-										<option value="COD">Cash On Delivery</option>
-										<option value="ONLINE">Online Payment</option>
-									</select>
-
-								</div>
-
-								<button class="btn bg-warning col-md-12">Place
-									Order</button>
-									
-									
-									
-
-							</div>
-						</div>
-					</div>
-
-				</div>
-			</form>
-			
-		</div>
-
-	</section>
+    </section>
 </body>
 </html>

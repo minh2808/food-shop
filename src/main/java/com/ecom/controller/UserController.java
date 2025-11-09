@@ -3,32 +3,32 @@ package com.ecom.controller;
 import java.security.Principal;
 import java.util.List;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-
 import com.ecom.exception.ResourceNotFoundException;
 import com.ecom.exception.InsufficientStockException;
-
 
 import com.ecom.model.Cart;
 import com.ecom.model.Category;
 import com.ecom.model.OrderRequest;
+import com.ecom.model.Product;
 import com.ecom.model.ProductOrder;
 import com.ecom.model.UserDtls;
 import com.ecom.service.CartService;
 import com.ecom.service.CategoryService;
 import com.ecom.service.OrderService;
 import com.ecom.service.UserService;
+import com.ecom.service.ProductService;
 import com.ecom.util.OrderStatus;
 
 import jakarta.servlet.http.HttpSession;
@@ -38,45 +38,49 @@ import jakarta.servlet.http.HttpSession;
 public class UserController {
 
 
-	@Autowired
-	private UserService userService;
+    @Autowired
+    private UserService userService;
 
-	@Autowired
-	private CategoryService categoryService;
+    @Autowired
+    private CategoryService categoryService;
 
-	@Autowired
-	private CartService cartService;
-
-
-	@Autowired
-	private OrderService orderService;
-
-	@GetMapping("/")
-	public String home() {
-		return "user/home";
-	}
-
-	@ModelAttribute
-	public void getUserDetails(Principal p, Model m) {
-		if (p != null) {
-			String email = p.getName();
-			UserDtls userDtls = userService.getUserByEmail(email);
-			m.addAttribute("user", userDtls);
-			Integer countCart = cartService.getCountCart(userDtls.getId());
-			m.addAttribute("countCart", countCart);
-		}
-		List<Category> allCategory = categoryService.getAllCategory();
-		m.addAttribute("categorys", allCategory);
-	}
+    @Autowired
+    private CartService cartService;
 
 
-	// Thông báo thêm vào Giỏ hàng
+    @Autowired
+    private OrderService orderService;
+
+    @Autowired
+    private ProductService productService;
+
+    @GetMapping("/")
+    public String home() {
+        return "user/home";
+    }
+
+    @ModelAttribute
+    public void getUserDetails(Principal p, Model m) {
+        if (p != null) {
+            String email = p.getName();
+            UserDtls userDtls = userService.getUserByEmail(email);
+            m.addAttribute("user", userDtls);
+            Integer countCart = cartService.getCountCart(userDtls.getId());
+            m.addAttribute("countCart", countCart);
+        }
+        List<Category> allCategory = categoryService.getAllCategory();
+        m.addAttribute("categorys", allCategory);
+    }
+
+
+    // Thông báo thêm vào Giỏ hàng
     @GetMapping("/addCart")
     public String addToCart(@RequestParam Integer pid, @RequestParam Integer uid, HttpSession session) {
         try {
             Cart saveCart = cartService.saveCart(pid, uid);
             if (!ObjectUtils.isEmpty(saveCart)) {
                 session.setAttribute("success", "Sản phẩm đã được thêm vào giỏ hàng");
+                return "redirect:/user/cart";   
             }
 
         } catch (ResourceNotFoundException e) {
@@ -88,10 +92,31 @@ public class UserController {
         } catch (Exception e) {
             session.setAttribute("error", "Đã xảy ra lỗi hệ thống không mong muốn.");
         }
-        return "redirect:/viewProduct/" + pid;             // Đặt hàng xong chuyển về trang sản phẩm
+        return "redirect:/viewProduct/" + pid;         // Đặt hàng không thành chuyển về trang sản phẩm
     }
 
-
+    @GetMapping("/viewProduct/{id}")
+        public String product(@PathVariable int id, Model m, 
+                            HttpSession session, 
+                            RedirectAttributes redirectAttributes) { // Thêm RedirectAttributes
+            try {
+                Product productById = productService.getProductById(id);
+                m.addAttribute("product", productById);
+            } catch (ResourceNotFoundException e) {
+                // CHUYỂN SANG DÙNG FLASH ATTRIBUTES và REDIRECT
+                redirectAttributes.addFlashAttribute("error", "Lỗi: Không tìm thấy sản phẩm này!");
+                return "redirect:/products"; // Chuyển hướng về trang danh sách sản phẩm
+                
+            } catch (InsufficientStockException e) {
+                redirectAttributes.addFlashAttribute("error", "Lỗi: Trong kho không đủ sản phẩm.");
+                return "redirect:/products"; 
+                
+            } catch (Exception e) {
+                redirectAttributes.addFlashAttribute("error", "Đã xảy ra lỗi hệ thống không mong muốn.");
+                return "redirect:/products";
+            }
+            return "view_product";
+        }
     // Trang Cart
     @GetMapping("/cart")
     public String loadCartPage(Principal p, Model m, HttpSession session) {
@@ -120,32 +145,58 @@ public class UserController {
     }
 
 
-	//cart inc/ dec
-	@GetMapping("/cartQuantityUpdate")
+    // THAY THẾ PHƯƠNG THỨC CART QUANTITY UPDATE
+    @GetMapping("/cartQuantityUpdate")
+    public String updateCartQuantity(
+            @RequestParam(required = false) String sy,           // sy: de, in, hoặc set
+            @RequestParam Integer cid,                             // cid: Cart ID
+            @RequestParam(required = false) Integer newQuantity,  // newQuantity: Số lượng mới từ input
+            RedirectAttributes redirectAttributes) {
+        
+        try {
+            if ("set".equalsIgnoreCase(sy) && newQuantity != null) {
+                // Cập nhật trực tiếp từ ô nhập liệu (sy=set)
+                cartService.updateQuantityByInput(cid, newQuantity);
+                redirectAttributes.addFlashAttribute("success", "Cập nhật số lượng thành công!");
+            
+            } else if ("in".equalsIgnoreCase(sy) || "de".equalsIgnoreCase(sy)) {
+                 // Cập nhật tăng/giảm (từ nút + / -)
+                 cartService.updateQuantity(sy, cid);
+                 redirectAttributes.addFlashAttribute("success", "Cập nhật giỏ hàng thành công!");
 
-	public String updateCartQuantity(@RequestParam String sy, @RequestParam Integer cid , RedirectAttributes redirectAttributes) {
-		try {
-			cartService.updateQuantity(sy, cid);
-			redirectAttributes.addFlashAttribute("success", "Cập nhật giỏ hàng thành công!");
-		} catch (InsufficientStockException e) {
-			redirectAttributes.addFlashAttribute("error", e.getMessage());
-		} catch (Exception e) {
-			redirectAttributes.addFlashAttribute("error", "Đã xảy ra lỗi khi cập nhật giỏ hàng.");
-		}
+            } else {
+                 // Nhập sai
+                 if (newQuantity != null) {
+                    cartService.updateQuantityByInput(cid, newQuantity);
+                    redirectAttributes.addFlashAttribute("success", "Cập nhật số lượng thành công!");
+                 } else {
+                    redirectAttributes.addFlashAttribute("error", "Nhập lại.");
+                 }
+            }
+            
+        } catch (InsufficientStockException e) {
+            redirectAttributes.addFlashAttribute("error", "Lỗi tồn kho: " + e.getMessage());
+        } catch (ResourceNotFoundException e) {
+            redirectAttributes.addFlashAttribute("error", "Lỗi: Không tìm thấy giỏ hàng.");
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("error", "Lỗi: " + e.getMessage());
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Đã xảy ra lỗi không mong muốn khi cập nhật giỏ hàng.");
+        }
 
-		return "redirect:/user/cart";
-	}
+        return "redirect:/user/cart";
+    }
 
 
-	private UserDtls getLoggedInUserDetails(Principal p) {
-		String email = p.getName();
-		UserDtls userDtls = userService.getUserByEmail(email);
+    private UserDtls getLoggedInUserDetails(Principal p) {
+        String email = p.getName();
+        UserDtls userDtls = userService.getUserByEmail(email);
 
         if (userDtls == null) {
             throw new ResourceNotFoundException("Không tìm thấy người dùng đã đăng nhập có email là: " + email);
         }
-		return userDtls;
-	}
+        return userDtls;
+    }
 
 
     @GetMapping("/orders")
@@ -191,11 +242,11 @@ public class UserController {
         }
     }
 
-	@GetMapping("/success")
-	public String loadSuccess() {
+    @GetMapping("/success")
+    public String loadSuccess() {
 
-		return "/user/success";
-	}
+        return "/user/success";
+    }
 
     @GetMapping("/user-orders")
     public String myOrder(Model m, Principal p, HttpSession session) {
@@ -249,5 +300,17 @@ public class UserController {
         return "redirect:/user/user-orders";
     }
 
+    // Xóa thư mục
+    @GetMapping("/removeCart/{id}")
+    public String removeCart(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
+        try {
+            cartService.removeCartItem(id);
+            redirectAttributes.addFlashAttribute("success", "Đã xóa mục khỏi giỏ hàng thành công!");
+        } catch (ResourceNotFoundException e) {
+            redirectAttributes.addFlashAttribute("error", "Lỗi: Không tìm thấy mục cần xóa.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Đã xảy ra lỗi khi xóa mục giỏ hàng.");
+        }
+        return "redirect:/user/cart";
+    }
 }
-

@@ -190,3 +190,77 @@ a:hover {
     }
 
 }
+.no-spinner::-webkit-inner-spin-button,
+.no-spinner::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.no-spinner {
+  -moz-appearance: textfield;
+}
+
+ /* SỬA LỖI THẨM MỸ */
+        .checkout-flex-wrapper {
+            display: flex;
+            align-items: center; 
+            justify-content: center;
+            min-height: 100%;
+            padding-top: 50px; 
+            padding-bottom: 50px; 
+        }
+
+        .checkout-main-content {
+            background-color: #ffffff;
+            border-radius: 15px; 
+            padding: 30px;
+            /* Đảm bảo khối này có thể căn giữa */
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .address-card {
+            border: none; 
+            padding: 20px 0;
+        }
+        
+        .summary-card {
+            background-color: #f8f9fa;
+            border: none; 
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); 
+        }
+        
+        .summary-table td {
+            padding: 8px 0;
+            border-top: none !important;
+        }
+
+        .final-price {
+            font-size: 1.2rem; 
+            color: #d11c1c;
+            font-weight: 800;
+        }
+
+        .form-control-lg {
+            border-radius: 8px; 
+        }
+/* Đảm bảo các style này có trong file style.css của bạn */
+.btn-proceed {
+    /* Màu nền đỏ chủ đạo */
+    background-color: #FF0000; 
+    border-color: #FF0000;
+    color: white;
+    font-weight: 700; /* Làm chữ đậm hơn */
+    font-size: 1.1rem; /* Làm nút to hơn */
+    padding: 12px 30px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-proceed:hover {
+    /* Hiệu ứng tối màu khi hover */
+    background-color: #CC0000; 
+    border-color: #CC0000;
+}
+

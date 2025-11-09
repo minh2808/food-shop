@@ -63,8 +63,6 @@ public class OrderRequest {
 		this.cityOrProvince = cityOrProvince;
 	}
 
-
-
 	public String getPaymentType() {
 		return paymentType;
 	}
