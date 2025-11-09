@@ -3,7 +3,6 @@ package com.ecom.controller;
 import java.security.Principal;
 import java.util.List;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,6 +29,7 @@ import com.ecom.service.CategoryService;
 import com.ecom.service.OrderService;
 import com.ecom.service.UserService;
 import com.ecom.util.OrderStatus;
+import com.ecom.model.Product;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -50,6 +50,9 @@ public class UserController {
 
 	@Autowired
 	private OrderService orderService;
+
+    @Autowired
+    private com.ecom.service.ProductService productService;
 
 	@GetMapping("/")
 	public String home() {
@@ -247,6 +250,22 @@ public class UserController {
         }
 
         return "redirect:/user/user-orders";
+    }
+
+    // Simple rating endpoint: record a 1-5 star rating and redirect back to product page
+    @GetMapping("/rateProduct")
+    public String rateProduct(@RequestParam Integer pid, @RequestParam Integer rating, HttpSession session) {
+        try {
+            Product p = productService.rateProduct(pid, rating);
+            if (p != null) {
+                session.setAttribute("success", "Cảm ơn bạn đã đánh giá sản phẩm.");
+            } else {
+                session.setAttribute("error", "Không tìm thấy sản phẩm để đánh giá.");
+            }
+        } catch (Exception e) {
+            session.setAttribute("error", "Lỗi khi lưu đánh giá sản phẩm.");
+        }
+        return "redirect:/viewProduct/" + pid;
     }
 
 }

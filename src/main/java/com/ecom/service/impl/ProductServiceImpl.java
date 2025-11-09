@@ -123,6 +123,25 @@ public class ProductServiceImpl implements ProductService {
 		return productRepository.findByTitleContainingIgnoreCaseOrCategoryContainingIgnoreCase(ch, ch);
 	}
 
+	@Override
+	public Product rateProduct(Integer productId, Integer rating) {
+		Product product = productRepository.findById(productId).orElse(null);
+		if (product == null) return null;
+
+		if (rating == null) return product;
+		int r = rating;
+		if (r < 1) r = 1;
+		if (r > 5) r = 5;
+
+		if (product.getRatingSum() == null) product.setRatingSum(0);
+		if (product.getRatingCount() == null) product.setRatingCount(0);
+
+		product.setRatingSum(product.getRatingSum() + r);
+		product.setRatingCount(product.getRatingCount() + 1);
+
+		return productRepository.save(product);
+	}
+
 	
 
 	

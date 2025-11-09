@@ -15,6 +15,9 @@ public interface ProductService {
 	public Boolean deleteProduct(Integer id);
 	
 	public Product getProductById(Integer id);
+    
+	// Simple rating endpoint: record a rating (1-5) for a product
+	public Product rateProduct(Integer productId, Integer rating);
 	
 	public Product updateProduct(Product product, MultipartFile file);
 	

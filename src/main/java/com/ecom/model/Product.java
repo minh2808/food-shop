@@ -41,6 +41,18 @@ public class Product {
 
 
 	private Integer stockQuantity;
+    
+	// Total sum of ratings (e.g. 5+4+3 ...). Use Integer for simplicity.
+	private Integer ratingSum = 0;
+
+	// Number of ratings received
+	private Integer ratingCount = 0;
+
+	@jakarta.persistence.Transient
+	public Double getAverageRating() {
+		if (ratingCount == null || ratingCount == 0 || ratingSum == null) return 0.0;
+		return ratingSum.doubleValue() / ratingCount.doubleValue();
+	}
 
 
 
