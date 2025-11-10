@@ -79,6 +79,11 @@ public class OrderAddress {
         return cityOrProvince;
     }
 
+    // fixed getter name to match field 'cityOrProvince' (camel-case O)
+    public String getCityOrProvince() {
+        return cityOrProvince;
+    }
+
     public void setCityOrProvince(String cityOrProvince) {
         this.cityOrProvince = cityOrProvince;
     }
