@@ -271,7 +271,9 @@ public class AdminController {
 	public String getAllOrders(Model m) {
 		List<ProductOrder> allOrders = orderService.getAllOrders();
 		m.addAttribute("orders", allOrders);
-		return "/admin/orders";
+		System.out.println(allOrders.get(0).getOrderAddress().getCityOrProvince());
+
+		return "admin/orders";
 	}
 	
 	@PostMapping("/update-order-status")

@@ -1,64 +1,80 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-	th:replace="~{base::layout(~{::section})}">
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+	  th:replace="~{base::layout(~{::section})}">
 <head>
-<meta charset="ISO-8859-1">
-<title>Insert title here</title>
+	<meta charset="UTF-8">
+	<title>Danh Sách Sản Phẩm</title>
 </head>
 <body>
-	<section>
-		<div class="container mt-5 p-5">
+<section>
+	<div class="container-lg p-5 mt-3">
 
-			<div class="card card-sh">
-				<div class="card-header text-center">
-					<p class="fs-4">View Food Items</p>
-					
-					<th:block th:if="${session.succMsg}">
-						<p class="text-success fw-bold">[[${session.succMsg}]]</p>
-						<th:block th:text="${@commonServiceImpl.removeSessionMessage()}"></th:block>
-					</th:block>
+		<div class="card shadow-lg border-0 rounded-3">
 
-					<th:block th:if="${session.errorMsg}">
-						<p class="text-danger fw-bold">[[${session.errorMsg}]]</p>
+			<div class="card-header text-center bg-dark text-white p-3">
+				<h3 class="mb-0">Danh Sách Sản Phẩm</h3>
+			</div>
+
+			<div class="card-body p-4">
+
+				<th:block th:if="${session.succMsg}">
+					<div class="alert alert-success" role="alert">
+						<strong>[[${session.succMsg}]]</strong>
 						<th:block th:text="${@commonServiceImpl.removeSessionMessage()}"></th:block>
-					</th:block>
-					
-				</div>
-				
-				<div class="card-body">
-					<table class="table">
-						<thead>
-							<tr>
-								<th scope="col">Sl No</th>
-								<th scope="col">Image</th>
-								<th scope="col">Title</th>
-								<th scope="col">Category</th>
-								<th scope="col">Price</th>
-								<th scope="col">Discount</th>
-								<th scope="col">Discount Price</th>
-								<th scope="col">Action</th>
-							</tr>
+					</div>
+				</th:block>
+				<th:block th:if="${session.errorMsg}">
+					<div class="alert alert-danger" role="alert">
+						<strong>[[${session.errorMsg}]]</strong>
+						<th:block th:text="${@commonServiceImpl.removeSessionMessage()}"></th:block>
+					</div>
+				</th:block>
+
+				<div class="table-responsive">
+					<table class="table table-striped table-hover align-middle">
+						<thead class="table-secondary">
+						<tr>
+							<th scope="col">STT</th>
+							<th scope="col">Hình Ảnh</th>
+							<th scope="col">Tên Sản Phẩm</th>
+							<th scope="col">Danh Mục</th>
+							<th scope="col" class="text-end">Giá Gốc</th>
+							<th scope="col" class="text-center">Giảm Giá</th>
+							<th scope="col" class="text-end">Giá Sau Giảm</th>
+							<th scope="col" class="text-center">Hành Động</th>
+						</tr>
 						</thead>
 						<tbody>
-							<tr th:each="p,c:${products}">
-								<th scope="row">[[${c.count}]]</th>
-								<td><img th:src="@{'/img/product/'+${p.image}}" width="90px" height="80px"></td>
-								<td>[[${p.title}]]</td>
-								<td>[[${p.category}]]</td>
-								<td>[[${p.price}]]</td>
-								<td>[[${p.discount}]]</td>
-								<td>[[${p.discountPrice}]]</td>
-					
-								<td><a th:href="@{'/admin/editProduct/'+${p.id}}" class="btn btn-sm btn-primary"><i class="fa-solid fa-pen-to-square"></i>Edit</a> 
-									<a th:href="@{'/admin/deleteProduct/'+${p.id}}" class="btn btn-sm btn-danger"><i class="fa-solid fa-trash"></i> Delete</a></td>
-							</tr>
+						<tr th:each="p,c:${products}">
+							<th scope="row">[[${c.count}]]</th>
+							<td>
+								<img th:src="@{'/img/product/'+${p.image}}"
+									 class="rounded"
+									 style="width: 80px; height: 80px; object-fit: cover;">
+							</td>
+							<td class="fw-bold">[[${p.title}]]</td>
+							<td>[[${p.category}]]</td>
+							<td class="text-end">[[${@commonServiceImpl.formatVnd(p.price)}]]₫</td>
+							<td class="text-center">[[${p.discount}]]%</td>
+							<td class="text-end fw-bold">[[${@commonServiceImpl.formatVnd(p.discountPrice)}]]₫</td>
+
+							<td class="text-center">
+								<a th:href="@{'/admin/editProduct/'+${p.id}}" class="btn btn-sm btn-primary me-1">
+									<i class="fa-solid fa-pen-to-square"></i> Sửa
+								</a>
+								<a th:href="@{'/admin/deleteProduct/'+${p.id}}" class="btn btn-sm btn-danger">
+									<i class="fa-solid fa-trash"></i> Xóa
+								</a>
+							</td>
+						</tr>
 
 						</tbody>
 					</table>
 				</div>
+
 			</div>
 		</div>
-
-	</section>
+	</div>
+</section>
 </body>
 </html>

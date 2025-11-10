@@ -1,64 +1,101 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-	th:replace="~{base::layout(~{::section})}">
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+	  th:replace="~{base::layout(~{::section})}">
 <head>
-<meta charset="ISO-8859-1">
-<title>Insert title here</title>
+	<title>Thêm sản phẩm</title>
 </head>
 <body>
-	<section>
-		<div class="container p-5 mt-3">
-			<div class="row">
-				<div class="col-md-6 offset-md-3">
-					<div class="card card-sh">
-						<div class="card-header text-center">    <p class="fs-4">Add Product</p>
-							
-						                                                        	<th:block th:if="${session.succMsg}">
-																					<p class="text-success fw-bold">[[${session.succMsg}]]</p>
-																					<th:block th:text="${@commonServiceImpl.removeSessionMessage()}"></th:block>
-																				    </th:block>
-													
-																				    <th:block th:if="${session.errorMsg}">
-																					<p class="text-danger fw-bold">[[${session.errorMsg}]]</p>
-																					<th:block th:text="${@commonServiceImpl.removeSessionMessage()}"></th:block>
-																				    </th:block>
-							
-							
-						</div>
-						<div class="card-body">
-							<form action="/admin/saveProduct" method="post" enctype="multipart/form-data">
-								<div class="mb-3">
-									<label>Enter Title</label> <input type="text" name="title" class="form-control">
-								</div>
+<section>
+	<div class="container p-5 mt-3">
+		<div class="row">
+			<div class="col-md-8 offset-md-2 col-lg-6 offset-lg-3">
+				<div class="card shadow-lg border-0 rounded-3">
 
-								<div class="mb-3">
-									<label>Enter Description</label>
-									<textarea rows="3" cols="" class="form-control" name="description"></textarea>
-								</div>
+					<div class="card-header text-center bg-dark text-white p-3">
+						<h3 class="mb-0">Thêm Sản Phẩm Mới</h3>
+					</div>
 
-								<div class="mb-3">
-									<label>Category</label> <select class="form-control" name="category">
-										<option>--select--</option>
-										<option th:each="c:${categories}">[[${c.name}]]</option>
-									</select>
-								</div>
+					<div class="card-body p-4 bg-light">
 
-								<div class="mb-3">
-									<label>Enter Price</label> <input type="number" name="price" class="form-control">
-								</div>
-								<div class="row">
+						<th:block th:if="${session.succMsg}">
+							<div class="alert alert-success" role="alert">
+								<strong>[[${session.succMsg}]]</strong>
+								<th:block th:text="${@commonServiceImpl.removeSessionMessage()}"></th:block>
+							</div>
+						</th:block>
+						<th:block th:if="${session.errorMsg}">
+							<div class="alert alert-danger" role="alert">
+								<strong>[[${session.errorMsg}]]</strong>
+								<th:block th:text="${@commonServiceImpl.removeSessionMessage()}"></th:block>
+							</div>
+						</th:block>
 
-									<div class="mb-3 col">
-										<label>Upload Image</label> <input type="file" name="file" class="form-control">
+						<form action="/admin/saveProduct" method="post" enctype="multipart/form-data">
+
+							<div class="mb-3">
+								<label for="title" class="form-label fw-bold">
+									<i class="bi bi-box-seam me-2"></i>Tên Sản Phẩm
+								</label>
+								<input type="text" id="title" name="title" class="form-control"
+									   placeholder="Vd: Áo Sơ Mi Trắng" required>
+							</div>
+
+							<div class="mb-3">
+								<label for="description" class="form-label fw-bold">
+									<i class="bi bi-card-text me-2"></i>Mô Tả
+								</label>
+								<textarea rows="4" id="description" class="form-control"
+										  name="description" placeholder="Nhập mô tả chi tiết cho sản phẩm..." required></textarea>
+							</div>
+
+							<div class="mb-3">
+								<label for="category" class="form-label fw-bold">
+									<i class="bi bi-tags me-2"></i>Danh Mục
+								</label>
+								<select class="form-select" id="category" name="category" required>
+									<option value="">-- Chọn danh mục --</option>
+									<option th:each="c:${categories}" th:value="${c.name}">[[${c.name}]]</option>
+								</select>
+							</div>
+
+							<div class="mb-3">
+								<label for="file" class="form-label fw-bold">
+									<i class="bi bi-image me-2"></i>Hình Ảnh
+								</label>
+								<input type="file" id="file" name="file" class="form-control" required>
+							</div>
+
+							<div class="row">
+								<div class="col-md-6 mb-3">
+									<label for="price" class="form-label fw-bold">
+										<i class="bi bi-cash-coin me-2"></i>Giá
+									</label>
+									<div class="input-group">
+										<input type="number" id="price" name="price" class="form-control"
+											   placeholder="Vd: 350000" required min="0">
+										<span class="input-group-text">VNĐ</span>
 									</div>
 								</div>
-								<button class="btn btn-warning col-md-12">Submit</button>
-							</form>
-						</div>
+
+								<div class="col-md-6 mb-3">
+									<label for="quantity" class="form-label fw-bold">
+										<i class="bi bi-boxes me-2"></i>Số Lượng
+									</label>
+									<input type="number" id="quantity" name="quantity" class="form-control"
+										   placeholder="Vd: 100" required min="0">
+								</div>
+							</div>
+
+							<button type="submit" class="btn btn-success btn-lg w-100 mt-3 fw-bold">
+								<i class="bi bi-save me-2"></i>
+								Gửi
+							</button>
+						</form>-*+
 					</div>
 				</div>
 			</div>
 		</div>
-	</section>
+	</div>
+</section>
 </body>
 </html>

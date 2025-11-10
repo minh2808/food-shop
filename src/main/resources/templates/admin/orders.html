@@ -1,95 +1,113 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-	th:replace="~{base::layout(~{::section})}">
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+	  th:replace="~{base::layout(~{::section})}">
 <head>
-<meta charset="ISO-8859-1">
-<title>Insert title here</title>
+	<meta charset="UTF-8">
+	<title>Quản Lý Đơn Hàng</title>
 </head>
 <body>
-	<section>
-		<div class="container-fluid mt-5 p-5">
-			<div class="row">
-				<p class="text-center fs-3">Customer Orders</p>			
-				<a href="/admin/" class="text-decoration-none  mb-3"><i class="fa-solid fa-arrow-left" ></i> Back</a> 
-				<th:block th:if="${session.succMsg}">
-					<p class="text-success fw-bold text-center">[[${session.succMsg}]]</p>
-					<th:block th:text="${@commonServiceImpl.removeSessionMessage()}"></th:block>
-				</th:block>
+<section>
+	<div class="container-lg p-5 mt-3">
 
-				<th:block th:if="${session.errorMsg}">
-					<p class="text-danger fw-bold text-center">[[${session.errorMsg}]]</p>
-					<th:block th:text="${@commonServiceImpl.removeSessionMessage()}"></th:block>
-				</th:block>
-				<div class="col-md-12 ">
+		<div class="card shadow-lg border-0 rounded-3">
 
-					<table class="table table-bordered card-sh ">
-						<thead >
-							<tr >
-								<th scope="col">Order Id</th>
-								<th scope="col">Deliver Details</th>
-								<th scope="col">Date</th>
-								<th scope="col">Product Details</th>
-								<th scope="col">Payment Type</th>
-								<th scope="col">Status</th>
-								<th scope="col">Action</th>
-							</tr>
-						</thead>
-					
-						<tbody>
-							<tr th:each="o:${orders}">
-							  <th scope="row">[[${o.orderId}]]</th>
-							  
-							  <td> [[${o.orderAddress.firstName+''+o.orderAddress.lastName}]]<br>
-								  [[${o.orderAddress.email}]] <br> 
-								 
-								  [[${o.orderAddress.address}]],  [[${o.orderAddress.city}]] , [[${o.orderAddress.pincode}]]  <br> 
-								  [[${o.orderAddress.state}]], NO: [[${o.orderAddress.mobileNo}]] <br> 
-							  
-							   </td>
-							  
-								<td>[[${o.orderDate}]]</td>
-								<td>[[${o.product.title}]]  <br> Quantity : [[${o.quantity}]] <br> Total Price :[[${o.quantity * o.price}]] </td>
-								<td>[[${o.paymentType}]]</td>
-								<td>[[${o.status}]]</td>
-														
-								<td>								
-                           
-									<form action="/admin/update-order-status" method="post">
-																			<div class="row">
-																				<div class="col">
-																					<select class="form-control" name="st">
-																						<option>--select--</option>
-																						<option value="1">In Progress</option>
-																						<option value="2">Order Received</option>
-																						<option value="3">Product Packed</option>
-																						<option value="4">Out for Delivery</option>
-																						<option value="5">Delivered</option>
-																						<option value="6">Cancelled</option>
-																					</select>
-																				</div>
-																				<input th:value="${o.id}" name="id" type="hidden">
-																				
-																				<div class="col">
-																					<th:block th:if="${o.status=='Cancelled' || o.status=='Delivered'}">
-																						<button class="btn btn-primary btn-sm col disabled">Update</button>
-																					</th:block>
-																					<th:block th:unless="${o.status=='Cancelled' || o.status=='Delivered'}">
-																						<button  class="btn btn-sm btn-primary ">Update</button>
-																					</th:block>
-									
-																				</div>
-																			</div>
-																		</form>
-								</td>
-						
-					     </tr>
-						</tbody>
-					
-					</table>
-				</div>
+			<div class="card-header text-center bg-dark text-white p-3">
+				<h3 class="mb-0">Quản Lý Đơn Hàng</h3>
 			</div>
 
-		</div>
-	</section>
+			<div class="card-body p-4">
+
+				<a href="/admin/" class="btn btn-secondary mb-3">
+					<i class="fa-solid fa-arrow-left me-2"></i> Quay Lại
+				</a>
+
+				<th:block th:if="${session.succMsg}">
+					<div class="alert alert-success" role="alert">
+						<strong>[[${session.succMsg}]]</strong>
+						<th:block th:text="${@commonServiceImpl.removeSessionMessage()}"></th:block>
+					</div>
+				</th:block>
+				<th:block th:if="${session.errorMsg}">
+					<div class="alert alert-danger" role="alert">
+						<strong>[[${session.errorMsg}]]</strong>
+						<th:block th:text="${@commonServiceImpl.removeSessionMessage()}"></th:block>
+					</div>
+				</th:block>
+
+				<div class="table-responsive">
+					<table class="table table-striped table-hover align-middle">
+						<thead class="table-secondary">
+						<tr>
+							<th scope="col">Mã ĐH</th>
+							<th scope="col" style="min-width: 230px;">Thông Tin Giao Hàng</th>
+							<th scope="col">Ngày Đặt</th>
+							<th scope="col" style="min-width: 200px;">Chi Tiết Sản Phẩm</th>
+							<th scope="col">Thanh Toán</th>
+							<th scope="col">Trạng Thái</th>
+							<th scope="col" style="min-width: 240px;">Hành Động</th>
+						</tr>
+						</thead>
+
+						<tbody>
+						<tr th:each="o:${orders}">
+							<th scope="row">[[${o.orderId}]]</th>
+
+							<td>
+								<span class="fw-bold">[[${o.orderAddress.fullName}]]</span><br>
+								<i class="fa-solid fa-envelope me-2 text-muted"></i>[[${o.orderAddress.email}]] <br>
+								<i class="fa-solid fa-phone me-2 text-muted"></i>[[${o.orderAddress.mobileNo}]] <br>
+								<i class="fa-solid fa-location-dot me-2 text-muted"></i>[[${o.orderAddress.address}]], [[${o.orderAddress.cityOrProvince}]]
+							</td>
+
+							<td>[[${o.orderDate}]]</td>
+
+							<td>
+								<span class="fw-bold">[[${o.product.title}]]</span><br>
+								Số lượng: [[${o.quantity}]] <br>
+								Tổng Tiền: <span class="text-danger fw-bold">[[${@commonServiceImpl.formatVnd(o.quantity * o.price)}]]₫</span>
+							</td>
+
+							<td>[[${o.paymentType}]]</td>
+
+							<td>
+								<th:block th:switch="${o.status}">
+									<span th:case="'Delivered'" class="badge bg-success">Đã giao</span>
+									<span th:case="'Cancelled'" class="badge bg-danger">Đã hủy</span>
+									<span th:case="'Out for Delivery'" class="badge bg-info">Đang giao</span>
+									<span th:case="'Product Packed'" class="badge bg-primary">Đã đóng gói</span>
+									<span th:case="'Order Received'" class="badge bg-primary">Đã nhận đơn</span>
+									<span th:case="'In Progress'" class="badge bg-warning text-dark">Đang xử lý</span>
+									<span th:case="*" class="badge bg-secondary">[[${o.status}]]</span>
+								</th:block>
+							</td>
+
+							<td>
+								<form action="/admin/update-order-status" method="post">
+									<div class="input-group">
+										<select class="form-select" name="st">
+											<option value="">--Chọn--</option>
+											<option value="1">Đang xử lý</option>
+											<option value="2">Đã nhận đơn</option>
+											<option value="3">Đã đóng gói</option>
+											<option value="4">Đang giao hàng</option>
+											<option value="5">Đã giao</option>
+											<option value="6">Đã hủy</option>
+										</select>
+										<input th:value="${o.id}" name="id" type="hidden">
+
+										<th:block th:if="${o.status=='Cancelled' || o.status=='Delivered'}">
+											<button class="btn btn-secondary" disabled>Cập nhật</button>
+										</th:block>
+										<th:block th:unless="${o.status=='Cancelled' || o.status=='Delivered'}">
+											<button class="btn btn-primary">Cập nhật</button>
+										</th:block>
+									</div>
+								</form>
+							</td>
+						</tr>
+						</tbody>
+					</table>
+				</div> </div> </div> </div>
+</section>
 </body>
 </html>

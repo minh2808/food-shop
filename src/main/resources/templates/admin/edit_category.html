@@ -1,53 +1,78 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-	th:replace="~{base::layout(~{::section})}">
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+	  th:replace="~{base::layout(~{::section})}">
 <head>
-<meta charset="ISO-8859-1">
-<title>Insert title here</title>
+	<meta charset="UTF-8">
+	<title>Chỉnh Sửa Danh Mục</title>
 </head>
 <body>
-	<section>
-		<div class="container-fluid p-5 mt-5">
-			<div class="row">
-				<div class="col-md-3 offset-md-4 ">
-					<div class="card card-sh">
-						<div class="card-header text-center ">
-							<p class="fs-4">Edit Category</p>
-							<th:block th:if="${session.succMsg}">
-								<p class="text-success fw-bold">[[${session.succMsg}]]</p>
-								<th:block th:text="${@commonServiceImpl.removeSessionMessage()}"></th:block>
-							</th:block>
+<section>
+	<div class="container p-5 mt-3">
+		<div class="row">
+			<div class="col-md-8 offset-md-2 col-lg-6 offset-lg-3">
 
-							<th:block th:if="${session.errorMsg}">
-								<p class="text-danger fw-bold">[[${session.errorMsg}]]</p>
-								<th:block th:text="${@commonServiceImpl.removeSessionMessage()}"></th:block>
-							</th:block>
+				<div class="card shadow-lg border-0 rounded-3">
 
-						</div>
-						<div class="card-body">
-							<form action="/admin/updateCategory" method="post" >
-								<input type="hidden" name="id" th:value="${category.id}">
-								<div class="mb-3">
-									<label>Enter Category</label> <input type="text" name="name" th:value="${category.name}" class="form-control">
+					<div class="card-header text-center bg-dark text-white p-3">
+						<h3 class="mb-0">Chỉnh Sửa Danh Mục</h3>
+					</div>
+
+					<div class="card-body p-4 bg-light">
+
+						<th:block th:if="${session.succMsg}">
+							<div class="alert alert-success" role="alert">
+								<strong>[[${session.succMsg}]]</strong>
+								<th:block th:text="${@commonServiceImpl.removeSessionMessage()}"></th:block>
+							</div>
+						</th:block>
+						<th:block th:if="${session.errorMsg}">
+							<div class="alert alert-danger" role="alert">
+								<strong>[[${session.errorMsg}]]</strong>
+								<th:block th:text="${@commonServiceImpl.removeSessionMessage()}"></th:block>
+							</div>
+						</th:block>
+
+						<form action="/admin/updateCategory" method="post">
+							<input type="hidden" name="id" th:value="${category.id}">
+
+							<div class="form-floating mb-3">
+								<input type="text" id="categoryName" name="name"
+									   th:value="${category.name}" class="form-control"
+									   placeholder="Tên Danh Mục" required>
+								<label for="categoryName" class="fw-bold">
+									<i class="fa-solid fa-tags me-2"></i>Tên Danh Mục
+								</label>
+							</div>
+
+							<div class="form-floating mb-3">
+                         <textarea id="categoryDesc" class="form-control"
+								   name="description" th:text="${category.description}"
+								   placeholder="Mô Tả"
+								   style="height: 120px"></textarea> <label for="categoryDesc" class="fw-bold">
+								<i class="fa-solid fa-card-text me-2"></i>Mô Tả
+							</label>
+							</div>
+
+							<div class="row g-2 mt-3">
+								<div class="col-6">
+									<a th:href="@{/admin/category}" class="btn btn-secondary btn-lg w-100">
+										<i class="fa-solid fa-arrow-left me-2"></i>
+										Quay Lại
+									</a>
 								</div>
-								<div class="mb-3">
-									<label>Enter Description</label>
-									<textarea rows="3" cols="" class="form-control" name="description">	[[${category.description}]]</textarea>
-							   </div>
-							
-
-								
-								
-								<button class="btn btn-warning col-md-12 mt-2">Update</button>
-							</form>
-						</div>
+								<div class="col-6">
+									<button type="submit" class="btn btn-success btn-lg w-100 fw-bold">
+										<i class="fa-solid fa-save me-2"></i>
+										Cập Nhật
+									</button>
+								</div>
+							</div>
+						</form>
 					</div>
 				</div>
-
-
-
 			</div>
 		</div>
-	</section>
+	</div>
+</section>
 </body>
 </html>

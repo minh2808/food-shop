@@ -75,7 +75,7 @@ public class OrderAddress {
         this.address = address;
     }
 
-    public String getCityorProvince() {
+    public String getCityOrProvince() {
         return cityOrProvince;
     }
 

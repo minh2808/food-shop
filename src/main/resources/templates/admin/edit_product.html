@@ -1,85 +1,134 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-	th:replace="~{base::layout(~{::section})}">
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+	  th:replace="~{base::layout(~{::section})}">
 <head>
-<meta charset="ISO-8859-1">
-<title>Insert title here</title>
+	<meta charset="UTF-8">
+	<title>Chỉnh Sửa Sản Phẩm</title>
 </head>
 <body>
-	<section>
-		<div class="container p-5 mt-3">
-			<div class="row">
-				<div class="col-md-6 offset-md-3">
-					<div class="card card-sh">
-						<div class="card-header text-center">    <p class="fs-4">Edit Product</p>
-							
-						                                                        	<th:block th:if="${session.succMsg}">
-																					<p class="text-success fw-bold">[[${session.succMsg}]]</p>
-																					<th:block th:text="${@commonServiceImpl.removeSessionMessage()}"></th:block>
-																				    </th:block>
-													
-																				    <th:block th:if="${session.errorMsg}">
-																					<p class="text-danger fw-bold">[[${session.errorMsg}]]</p>
-																					<th:block th:text="${@commonServiceImpl.removeSessionMessage()}"></th:block>
-																				    </th:block>
-							
-							
-						</div>
-						<div class="card-body">
-							<form action="/admin/updateProduct" method="post" enctype="multipart/form-data">
-								
-								<input type="hidden" name="id" th:value="${product.id}">
-								<div class="mb-3">
-									<label>Enter Title</label> <input type="text" name="title" th:value="${product.title}" class="form-control">
-								</div>
+<section>
+	<div class="container p-5 mt-3">
+		<div class="row">
+			<div class="col-md-8 offset-md-2 col-lg-6 offset-lg-3">
 
-								<div class="mb-3">
-									<label>Enter Description</label>
-									<textarea rows="3" cols="" class="form-control" name="description">	[[${product.description}]]</textarea>
-								</div>
-								
-                             <div class="row">
-								<div class="mb-3 col">
-									<label>Category</label> <select class="form-control" name="category">
-										<option>[[${product.category}]]</option>
-										<option th:each="c:${categories}">[[${c.name}]]</option>
+				<div class="card shadow-lg border-0 rounded-3">
+
+					<div class="card-header text-center bg-dark text-white p-3">
+						<h3 class="mb-0">Chỉnh Sửa Sản Phẩm</h3>
+					</div>
+
+					<div class="card-body p-4 bg-light">
+
+						<th:block th:if="${session.succMsg}">
+							<div class="alert alert-success" role="alert">
+								<strong>[[${session.succMsg}]]</strong>
+								<th:block th:text="${@commonServiceImpl.removeSessionMessage()}"></th:block>
+							</div>
+						</th:block>
+						<th:block th:if="${session.errorMsg}">
+							<div class="alert alert-danger" role="alert">
+								<strong>[[${session.errorMsg}]]</strong>
+								<th:block th:text="${@commonServiceImpl.removeSessionMessage()}"></th:block>
+							</div>
+						</th:block>
+
+						<form action="/admin/updateProduct" method="post" enctype="multipart/form-data">
+
+							<input type="hidden" name="id" th:value="${product.id}">
+
+							<div class="mb-3">
+								<label for="title" class="form-label fw-bold">
+									<i class="bi bi-box-seam me-2"></i>Tên Sản Phẩm
+								</label>
+								<input type="text" id="title" name="title"
+									   th:value="${product.title}" class="form-control" required>
+							</div>
+
+							<div class="mb-3">
+								<label for="description" class="form-label fw-bold">
+									<i class="bi bi-card-text me-2"></i>Mô Tả
+								</label>
+								<textarea rows="4" id="description" class="form-control"
+										  name="description" th:text="${product.description}" required></textarea>
+							</div>
+
+							<div class="row">
+								<div class="col-md-6 mb-3">
+									<label for="category" class="form-label fw-bold">
+										<i class="bi bi-tags me-2"></i>Danh Mục
+									</label>
+									<select class="form-select" id="category" name="category" required>
+										<option th:each="c:${categories}"
+												th:value="${c.name}"
+												th:text="${c.name}"
+												th:selected="${c.name == product.category}">
+										</option>
 									</select>
 								</div>
 
-								<div class="mb-3 col">
-									<label>Enter Price</label> <input type="number" name="price" class="form-control" th:value="${product.price}">
-								</div>
-                             </div>
-							 
-							 
-							                              <div class="row">
-							 									<div class="mb-3 col">
-							 										<label>Discount</label> <input type="number" name="discount"
-							 											th:value="${product.discount}" class="form-control">
-							 									</div>
-							 									<div class="mb-3 col">
-							 										<label>Discount Price</label> <input type="number" readonly
-							 											th:value="${product.discountPrice}" class="form-control">
-							 									</div>
-							 								</div>
-							 
-								<div class="row">
-									<div class="mb-3 col">
-										<label>Upload Image</label> <input type="file" name="file" class="form-control">
+								<div class="col-md-6 mb-3">
+									<label for="price" class="form-label fw-bold">
+										<i class="bi bi-cash-coin me-2"></i>Giá Gốc
+									</label>
+									<div class="input-group">
+										<input type="number" id="price" name="price"
+											   class="form-control" th:value="${product.price}" required min="0">
+										<span class="input-group-text">VNĐ</span>
 									</div>
-									<div class="mt-1">
-									<img th:src="@{'/img/product/'+${product.image}}" width="150px" height="100px">
-									</div>
-									
-									
 								</div>
-								<button class="btn btn-warning col-md-12 mt-3">Update</button>
-							</form>
-						</div>
+							</div>
+
+
+							<div class="row">
+								<div class="mb-3 col-md-6">
+									<label for="discount" class="form-label fw-bold">
+										<i class="bi bi-percent me-2"></i>Giảm Giá
+									</label>
+									<div class="input-group">
+										<input type="number" id="discount" name="discount"
+											   th:value="${product.discount}" class="form-control" required min="0" max="100">
+										<span class="input-group-text">%</span>
+									</div>
+								</div>
+
+								<div class="mb-3 col-md-6">
+									<label for="discountPrice" class="form-label fw-bold">
+										<i class="bi bi-coin me-2"></i>Giá Sau Giảm
+									</label>
+									<div class="input-group">
+										<input type="number" id="discountPrice" readonly
+											   th:value="${product.discountPrice}" class="form-control">
+										<span class="input-group-text">VNĐ</span>
+									</div>
+								</div>
+							</div>
+
+							<div class="row align-items-center">
+								<div class="mb-3 col-md-7">
+									<label for="file" class="form-label fw-bold">
+										<i class="bi bi-image me-2"></i>Tải Ảnh Mới
+									</label>
+									<input type="file" id="file" name="file" class="form-control">
+									<div class="form-text">Bỏ trống nếu bạn không muốn đổi ảnh.</div>
+								</div>
+
+								<div class="mb-3 col-md-5 text-center">
+									<label class="form-label fw-bold d-block">Ảnh Hiện Tại</label>
+									<img th:src="@{'/img/product/'+${product.image}}" class="rounded"
+										 style="width: 150px; height: 150px; object-fit: cover; border: 1px solid #ddd;">
+								</div>
+							</div>
+
+							<button type="submit" class="btn btn-success btn-lg w-100 mt-3 fw-bold">
+								<i class="bi bi-save me-2"></i>
+								Cập Nhật
+							</button>
+						</form>
 					</div>
 				</div>
 			</div>
 		</div>
-	</section>
+	</div>
+</section>
 </body>
 </html>

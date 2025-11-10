@@ -1,57 +1,65 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-	th:replace="~{base::layout(~{::section})}">
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+	  th:replace="~{base::layout(~{::section})}">
 <head>
-<meta charset="ISO-8859-1">
-<title>Insert title here</title>
+	<meta charset="UTF-8">
+	<title>Quản Lý Người Dùng</title>
 </head>
 <body>
-	<section>
-		<div class="container-fluid mt-5 p-5">
+<section>
+	<div class="container-lg p-5 mt-3">
 
-			<div class="card card-sh">
-				<div class="card-header text-center">
-					<p class="fs-4">Users</p>
-					<th:block th:if="${session.succMsg}">
-						<p class="text-success fw-bold">[[${session.succMsg}]]</p>
-						<th:block th:text="${@commonServiceImpl.removeSessionMessage()}"></th:block>
-					</th:block>
+		<div class="card shadow-lg border-0 rounded-3">
 
-					<th:block th:if="${session.errorMsg}">
-						<p class="text-danger fw-bold">[[${session.errorMsg}]]</p>
+			<div class="card-header text-center bg-dark text-white p-3">
+				<h3 class="mb-0">Danh Sách Người Dùng</h3>
+			</div>
+
+			<div class="card-body p-4">
+
+				<th:block th:if="${session.succMsg}">
+					<div class="alert alert-success" role="alert">
+						<strong>[[${session.succMsg}]]</strong>
 						<th:block th:text="${@commonServiceImpl.removeSessionMessage()}"></th:block>
-					</th:block>
-				</div>
-				<div class="card-body">
-					<table class="table">
-						<thead>
-							<tr>
-								<th scope="col">Sl No</th>
-								<th scope="col">Name</th>
-								<th scope="col">Email</th>
-								<th scope="col">Mobile No</th>
-								<th scope="col">Address</th>
-								
-								<th scope="col">Action</th>
-							</tr>
+					</div>
+				</th:block>
+				<th:block th:if="${session.errorMsg}">
+					<div class="alert alert-danger" role="alert">
+						<strong>[[${session.errorMsg}]]</strong>
+						<th:block th:text="${@commonServiceImpl.removeSessionMessage()}"></th:block>
+					</div>
+				</th:block>
+
+				<div class="table-responsive">
+					<table class="table table-striped table-hover align-middle">
+						<thead class="table-secondary">
+						<tr>
+							<th scope="col">STT</th>
+							<th scope="col">Họ Tên</th>
+							<th scope="col">Email</th>
+							<th scope="col">Số Điện Thoại</th>
+							<th scope="col" style="min-width: 250px;">Địa Chỉ</th>
+							<th scope="col" class="text-center">Hành Động</th>
+						</tr>
 						</thead>
 						<tbody>
-							<tr th:each="u,c:${users}">
-								<th scope="row">[[${c.count}]]</th>
-								<td>[[${u.name}]]</td>
-								<td>[[${u.email}]]</td>
-								<td>[[${u.mobileNumber}]]</td>
-								<td>[[${u.address+','+u.city+','+u.state+','+u.pincode}]]</td>
-								
-								<td><a th:href="@{'/admin/deleteUserDtls/'+${u.id}}" class="btn btn-sm btn-danger">Delete</a> </td>
-							</tr>
+						<tr th:each="u,c:${users}">
+							<th scope="row">[[${c.count}]]</th>
+							<td>[[${u.name}]]</td>
+							<td>[[${u.email}]]</td>
+							<td>[[${u.mobileNumber}]]</td>
+							<td>[[${u.address + ', ' + u.cityOrProvince}]]</td>
+
+							<td class="text-center">
+								<a th:href="@{'/admin/deleteUserDtls/'+${u.id}}" class="btn btn-sm btn-danger">
+									<i class="fa-solid fa-trash me-1"></i>
+									Xóa
+								</a>
+							</td>
+						</tr>
 
 						</tbody>
 					</table>
-				</div>
-			</div>
-		</div>
-
-	</section>
+				</div> </div> </div> </div> </section>
 </body>
 </html>

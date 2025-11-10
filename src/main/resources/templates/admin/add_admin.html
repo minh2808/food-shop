@@ -1,138 +1,131 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-	th:replace="~{base::layout(~{::section})}">
-	<head>
-		<title>  </title>
-	</head>
-	
-	<body>
-		<section>
-				<div class="container-fluid mt-5 p-5"> 
-					<div class="row">
-						<div class="col-md-5">
-							<div class="card shadow p-3 mb-5 bg-body-tertiary rounded">
-								<div class="card-header text-center">
-									<p class="fs-4 text-center">Add Admin</p>
-									                                           <th:block th:if="${session.succMsg}">
-																		       <p class="text-success fw-bold">[[${session.succMsg}]]</p>
-																			  <th:block th:text="${@commonServiceImpl.removeSessionMessage()}"></th:block>
-																			    </th:block>
-																					
-																			 <th:block th:if="${session.errorMsg}">
-																			 <p class="text-danger fw-bold">[[${session.errorMsg}]]</p>
-																		<th:block th:text="${@commonServiceImpl.removeSessionMessage()}"></th:block>
-																			    </th:block>
-									
-								</div>
-								<div class="card-body">
-									<form action="/admin/save-admin" method="post">
-		
-										<div class="row">
-											<div class="col">
-												<label class="form-label">Full Name</label> <input required
-													class="form-control" name="name" type="text">
-											</div>
-		
-											<div class="col">
-												<label class="form-label">Mobile Number</label> <input required
-													class="form-control" name="mobileNumber" type="number">
-											</div>
-		
-										</div>
-		
-										<div class="mb-3">
-											<label class="form-label">Email</label> <input required
-												class="form-control" name="email" type="email">
-										</div>
-		
-		
-										<div class="row">
-											<div class="col">
-												<label class="form-label">Address</label> <input required
-													class="form-control" name="address" type="text">
-											</div>
-		
-											<div class="col">
-												<label class="form-label">City</label> <input required
-													class="form-control" name="city" type="text">
-											</div>
-		
-										</div>
-		
-										<div class="row">
-											<div class="col">
-												<label class="form-label">State</label> <input required
-													class="form-control" name="state" type="text">
-											</div>
-		
-											<div class="col">
-												<label class="form-label">Pincode</label> <input required
-													class="form-control" name="pincode" type="number">
-											</div>
-		
-										</div>
-		
-		
-										<div class="row">
-											<div class="col">
-												<label class="form-label">Password</label> <input required
-													class="form-control" name="password" type="password">
-											</div>
-		
-											<div class="col">
-												<label class="form-label">Confirm Password</label> <input required
-													class="form-control" name="cpassword" type="password">
-											</div>
-		
-										</div>
-		
-		
-		
-										<div class="text-center mt-3">
-										         <button type="submit" class="btn btn-success text-white col-md-8 ">Register</button>
-										  </div>
-									</form>
-								</div>
-		
-								
-							</div>
-						</div>
-						
-						
-						
-						<div class="col-md-7">
-										<div class="card shadow p-3 mb-5 bg-body-tertiary rounded">
-											<div class="card-header text-center fs-4">Admin Details</div>
-											<div class="card-body">
-												<table class="table">
-													<thead>
-														<tr>
-															<th scope="col">Name</th>
-															<th scope="col">MobileNo</th>
-															<th scope="col">Email</th>
-															<th scope="col">Action</th>
-														</tr>
-													</thead>
-													<tbody>
-														          <tr th:each="u,c:${users}">
-												                     
-																	      <td>[[${u.name}]]</td>
-																		  <td>[[${u.mobileNumber}]]</td>
-																		  <td>[[${u.email}]]</td>
-																		
-																		 <td><a th:href="@{'/admin/deleteAdmin/'+${u.id}}" class="btn btn-sm btn-danger">Delete</a> </td>
-																 </tr>
-						
-													</tbody>
-												</table>
-											</div>
-										</div>
-						
-									</div>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+	  th:replace="~{base::layout(~{::section})}">
+<head>
+	<meta charset="UTF-8">
+	<title>Quản Lý Admin</title>
+</head>
+<body>
+<section>
+	<div class="container-lg p-5 mt-3">
+		<div class="row">
 
+			<div class="col-md-5 mb-4">
+				<div class="card shadow-lg border-0 rounded-3">
+					<div class="card-header text-center bg-dark text-white p-3">
+						<h3 class="mb-0">Thêm Admin Mới</h3>
+					</div>
+
+					<div class="card-body p-4 bg-light">
+
+						<th:block th:if="${session.succMsg}">
+							<div class="alert alert-success" role="alert">
+								<strong>[[${session.succMsg}]]</strong>
+								<th:block th:text="${@commonServiceImpl.removeSessionMessage()}"></th:block>
+							</div>
+						</th:block>
+						<th:block th:if="${session.errorMsg}">
+							<div class="alert alert-danger" role="alert">
+								<strong>[[${session.errorMsg}]]</strong>
+								<th:block th:text="${@commonServiceImpl.removeSessionMessage()}"></th:block>
+							</div>
+						</th:block>
+
+						<form action="/admin/save-admin" method="post">
+
+							<div class="row">
+								<div class="col-md-6 mb-3">
+									<label for="name" class="form-label fw-bold">
+										<i class="fa-solid fa-user me-2"></i>Họ Tên
+									</label>
+									<input required class="form-control" name="name" id="name" type="text" placeholder="Vd: Nguyễn Văn A">
+								</div>
+								<div class="col-md-6 mb-3">
+									<label for="mobileNumber" class="form-label fw-bold">
+										<i class="fa-solid fa-phone me-2"></i>Số Điện Thoại
+									</label>
+									<input required class="form-control" name="mobileNumber" id="mobileNumber" type="number" placeholder="Vd: 0901234567">
+								</div>
+							</div>
+
+							<div class="mb-3">
+								<label for="email" class="form-label fw-bold">
+									<i class="fa-solid fa-envelope me-2"></i>Email
+								</label>
+								<input required class="form-control" name="email" id="email" type="email" placeholder="Vd: admin@example.com">
+							</div>
+
+							<div class="row">
+								<div class="col-md-7 mb-3">
+									<label for="address" class="form-label fw-bold">
+										<i class="fa-solid fa-location-dot me-2"></i>Địa Chỉ
+									</label>
+									<input required class="form-control" name="address" id="address" type="text" placeholder="Vd: 123 Đường ABC">
+								</div>
+								<div class="col-md-5 mb-3">
+									<label for="city" class="form-label fw-bold">
+										<i class="fa-solid fa-city me-2"></i>Thành Phố
+									</label>
+									<input required class="form-control" name="cityOrProvince" id="city" type="text" placeholder="Vd: Hà Nội">
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-md-6 mb-3">
+									<label for="password" class="form-label fw-bold">
+										<i class="fa-solid fa-lock me-2"></i>Mật Khẩu
+									</label>
+									<input required class="form-control" name="password" id="password" type="password">
+								</div>
+								<div class="col-md-6 mb-3">
+									<label for="cpassword" class="form-label fw-bold">
+										<i class="fa-solid fa-check-double me-2"></i>Xác Nhận Mật Khẩu
+									</label>
+									<input required class="form-control" name="cpassword" id="cpassword" type="password">
+								</div>
+							</div>
+
+							<div class="text-center mt-3">
+								<button type="submit" class="btn btn-success btn-lg w-100 fw-bold">
+									<i class="fa-solid fa-user-plus me-2"></i>
+									Đăng Ký
+								</button>
+							</div>
+						</form>
 					</div>
 				</div>
-		
-			</section>
-	</body>
+			</div>
+
+			<div class="col-md-7">
+				<div class="card shadow-lg border-0 rounded-3">
+					<div class="card-header text-center bg-dark text-white p-3">
+						<h3 class="mb-0">Danh Sách Admin</h3>
+					</div>
+					<div class="card-body p-4">
+						<div class="table-responsive">
+							<table class="table table-striped table-hover align-middle">
+								<thead class="table-secondary">
+								<tr>
+									<th scope="col">Họ Tên</th>
+									<th scope="col">Số Điện Thoại</th>
+									<th scope="col">Email</th>
+									<th scope="col" class="text-center">Hành Động</th>
+								</tr>
+								</thead>
+								<tbody>
+								<tr th:each="u,c:${users}">
+									<td>[[${u.name}]]</td>
+									<td>[[${u.mobileNumber}]]</td>
+									<td>[[${u.email}]]</td>
+									<td class="text-center">
+										<a th:href="@{'/admin/deleteAdmin/'+${u.id}}" class="btn btn-sm btn-danger">
+											<i class="fa-solid fa-trash me-1"></i>
+											Xóa
+										</a>
+									</td>
+								</tr>
+								</tbody>
+							</table>
+						</div> </div> </div> </div> </div> </div> </section>
+</body>
 </html>
