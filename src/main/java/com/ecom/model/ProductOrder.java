@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.util.Date;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -39,8 +40,19 @@ public class ProductOrder {
 
 	private String paymentType;
 
+	@Column(name = "total_amount", nullable = false)
+	private Double totalAmount;
+
 	@OneToOne(cascade = CascadeType.ALL)
 	private OrderAddress orderAddress;
+
+	public Double getTotalAmount() {
+		return totalAmount;
+	}
+
+	public void setTotalAmount(Double totalAmount) {
+		this.totalAmount = totalAmount;
+	}
 	
 
 	public Integer getId() {
