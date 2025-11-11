@@ -17,7 +17,7 @@ import com.ecom.repository.CartRepository;
 import com.ecom.repository.ProductOrderRepository;
 import com.ecom.service.OrderService;
 import com.ecom.util.OrderStatus;
-
+import com.ecom.model.Product;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -37,37 +37,34 @@ public class OrderServiceImpl implements OrderService {
 
 		List<Cart> carts = cartRepository.findByUserId(userid);
 
-		// if no cart items, nothing to do
 		if (carts == null || carts.isEmpty()) {
 			return;
 		}
 
 		for (Cart cart : carts) {
-
-			// check stock availability and decrement
+			// kiểm tra Product có còn trong kho không
 			if (cart.getProduct() == null) {
 				throw new com.ecom.exception.ResourceNotFoundException("Sản phẩm không tồn tại trong giỏ hàng.");
 			}
-			com.ecom.model.Product prod = cart.getProduct();
+			Product prod = cart.getProduct();
 			Integer stock = prod.getStockQuantity() != null ? prod.getStockQuantity() : 0;
 			Integer needed = cart.getQuantity() != null ? cart.getQuantity() : 0;
+
+			// nếu không đủ hàng trong kho thì báo lỗi
 			if (stock < needed) {
 				throw new com.ecom.exception.InsufficientStockException("Trong kho không đủ sản phẩm: " + prod.getTitle());
 			}
 			prod.setStockQuantity(stock - needed);
-			// persist updated product stock
 			productRepository.save(prod);
 
+			// Tạo đơn hàng mới
 			ProductOrder order = new ProductOrder();
-
 			order.setOrderId(UUID.randomUUID().toString());
 			order.setOrderDate(LocalDate.now());
-
 			order.setProduct(cart.getProduct());
 			try {
 				order.setPrice(cart.getProduct().getDiscountPrice());
 			} catch (Exception ex) {
-				// fallback in case product or price is null
 				order.setPrice(0.0);
 			}
 
@@ -77,7 +74,6 @@ public class OrderServiceImpl implements OrderService {
 			order.setStatus( OrderStatus.IN_PROGRESS.getName());
 			order.setPaymentType(orderRequest.getPaymentType());
 
-			// compute and set total amount to satisfy DB NOT NULL constraint
 			try {
 				double p = order.getPrice() != null ? order.getPrice() : 0.0;
 				int q = order.getQuantity() != null ? order.getQuantity() : 0;
@@ -101,7 +97,6 @@ public class OrderServiceImpl implements OrderService {
 
 		}
 
-		// remove all carts for the user after successful order creation
 		cartRepository.deleteAll(carts);
 
 	}
@@ -136,7 +131,6 @@ public class OrderServiceImpl implements OrderService {
 		}
 
 		ProductOrder order = optional.get();
-		// restore stock
 		if (order.getProduct() != null) {
 			com.ecom.model.Product prod = order.getProduct();
 			Integer stock = prod.getStockQuantity() != null ? prod.getStockQuantity() : 0;
@@ -145,7 +139,6 @@ public class OrderServiceImpl implements OrderService {
 			productRepository.save(prod);
 		}
 
-		// delete the order record
 		orderRepository.delete(order);
 	}
 
