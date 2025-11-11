@@ -15,6 +15,11 @@ public interface OrderService {
 	
 	public ProductOrder updateOrderStatus(Integer id,String status);
 	
+	/**
+	 * Cancel order: restore product stock and remove the order record.
+	 */
+	public void cancelOrder(Integer id);
+	
 	public List<ProductOrder> getAllOrders();
 
 }

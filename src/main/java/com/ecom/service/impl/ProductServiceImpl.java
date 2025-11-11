@@ -70,6 +70,7 @@ public class ProductServiceImpl implements ProductService {
 		dbProduct.setCategory(product.getCategory());
 		dbProduct.setPrice(product.getPrice());
 		dbProduct.setImage(imageName);
+		dbProduct.setStockQuantity(product.getStockQuantity());
 		
 		dbProduct.setDiscount(product.getDiscount());
 

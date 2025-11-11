@@ -237,7 +237,8 @@ public class UserController {
             return "redirect:/user/orders";
 
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Lỗi giao dịch không mong muốn.");
+            // include exception message to help debug transaction errors
+            redirectAttributes.addFlashAttribute("error", "Lỗi giao dịch không mong muốn: " + e.getMessage());
             return "redirect:/user/orders";
         }
     }
@@ -282,12 +283,17 @@ public class UserController {
                 session.setAttribute("error", "Mã trạng thái không hợp lệ.");
                 return "redirect:/user/user-orders";
             }
-            ProductOrder updateOrder = orderService.updateOrderStatus(id, status);
-
-            if (!ObjectUtils.isEmpty(updateOrder)) {
-                session.setAttribute("success", "Cập nhật thành công");
+            // If cancelling, restore stock and delete the order
+            if (OrderStatus.CANCEL.getName().equals(status)) {
+                orderService.cancelOrder(id);
+                session.setAttribute("success", "Đã hủy đơn hàng và hoàn trả kho.");
             } else {
-                session.setAttribute("error", "Cập nhật thất bại. Đơn hàng không tìm thấy hoặc lỗi nội bộ.");
+                ProductOrder updateOrder = orderService.updateOrderStatus(id, status);
+                if (!ObjectUtils.isEmpty(updateOrder)) {
+                    session.setAttribute("success", "Cập nhật thành công");
+                } else {
+                    session.setAttribute("error", "Cập nhật thất bại. Đơn hàng không tìm thấy hoặc lỗi nội bộ.");
+                }
             }
 
         } catch (ResourceNotFoundException e) {

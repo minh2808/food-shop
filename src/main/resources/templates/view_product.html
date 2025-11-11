@@ -20,8 +20,98 @@
             margin-top: 20px;
             border-left: 5px solid #FF0000;
         }
-        /* Style cho khối tồn kho chi tiết */
-        
+
+        /* === CSS CHO TỒN KHO === */
+        .stock-detail {
+            margin-top: 20px;
+            font-size: 1.1rem;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        .stock-ok {
+            background-color: #e6f7ec; /* Xanh lá nhạt */
+            border-left: 5px solid #28a745; /* Xanh lá đậm */
+            color: #155724;
+        }
+        .stock-low {
+            background-color: #fff3cd; /* Vàng nhạt */
+            border-left: 5px solid #ffc107; /* Vàng đậm */
+            color: #856404;
+        }
+        .stock-out {
+            background-color: #f8d7da; /* Đỏ nhạt */
+            border-left: 5px solid #dc3545; /* Đỏ đậm */
+            color: #721c24;
+        }
+        /* === KẾT THÚC CSS TỒN KHO === */
+
+
+        /* === CSS CHO BÌNH LUẬN === */
+        .comment-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        /* Cập nhật flexbox cho item */
+        .comment-item {
+            display: flex; /* Bật Flexbox */
+            gap: 15px; /* Khoảng cách giữa avatar và nội dung */
+            background: white;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        /* CSS cho Avatar */
+        .comment-avatar {
+            width: 45px;
+            height: 45px;
+            background: #007bff; /* Màu mặc định */
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+            flex-shrink: 0; /* Không bị co lại */
+            text-transform: uppercase;
+        }
+
+        /* CSS cho thân bình luận (bên phải avatar) */
+        .comment-body {
+            flex-grow: 1; /* Lấp đầy không gian */
+        }
+
+        .comment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .comment-author {
+            font-weight: bold;
+            color: #007bff;
+        }
+        .comment-date {
+            font-size: 0.85rem;
+            color: #6c757d;
+        }
+        .comment-content {
+            line-height: 1.6;
+            word-wrap: break-word;
+        }
+        .comment-form {
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        /* === KẾT THÚC CSS BÌNH LUẬN === */
+
     </style>
     <meta charset="UTF-8">
 </head>
@@ -29,20 +119,18 @@
 <section>
 
     <div th:if="${error}" class="alert alert-danger" id="errorPopup" style="display:none;">
-		[[${error}]]
+        [[${error}]]
+    </div>
+    <div th:if="${success}" class="alert alert-success" id="successPopup" style="display:none;">
+        [[${success}]]
     </div>
 
-	<div th:if="${success}" class="alert alert-success" id="successPopup" style="display:none;">
-		[[${success}]]
-	</div>
 
     <div class="container product-detail-container">
-
-        <div class="col-md-10 offset-md-1 p-4 bg-white rounded-3 shadow-lg"> 
+        <div class="col-md-10 offset-md-1 p-4 bg-white rounded-3 shadow-lg">
             <h1 class="text-center mb-5 fw-bold accent-color">Chi tiết sản phẩm</h1>
 
             <div class="row">
-
                 <div class="col-12 mb-4">
                     <th:block th:if="${session.succMsg}">
                         <div class="alert alert-success text-center" role="alert">
@@ -50,7 +138,6 @@
                         </div>
                         <th:block th:text="${@commonServiceImpl.removeSessionMessage()}"></th:block>
                     </th:block>
-
                     <th:block th:if="${session.errorMsg}">
                         <div class="alert alert-danger text-center" role="alert">
                             <i class="fa-solid fa-triangle-exclamation me-2"></i> [[${session.errorMsg}]]
@@ -62,9 +149,7 @@
                 <div class="col-md-5">
                     <img alt="Hình ảnh sản phẩm" th:src="@{'/img/product/'+${product.image}}" class="product-image" width="100%" height="400px">
                 </div>
-
                 <div class="col-md-7 ps-md-5">
-
                     <p class="lead">
                         <span class="fw-bold">Tên sản phẩm: </span><span class="fs-4">[[${product.title}]]</span>
                     </p>
@@ -72,30 +157,29 @@
                         <span class="fw-bold">Danh mục:</span>
                         <span class="badge bg-secondary">[[${product.category}]]</span>
                     </p>
-
                     <h4 class="fw-bold mt-4">Mô tả</h4>
                     <p class="text-muted">
                         [[${product.description}]]
                     </p>
-
                     <div class="price-display">
                         <span class="fs-2 fw-bold accent-color me-3">[[${@commonServiceImpl.formatVnd(product.discountPrice)}]]₫</span>
                         <span class="fs-4 text-decoration-line-through text-secondary me-2">[[${@commonServiceImpl.formatVnd(product.price)}]]₫</span>
                         <span class="badge bg-danger fs-5">Giảm [[${product.discount}]]%</span>
                     </div>
 
-                    <div class="stock-detail" 
-                         th:classappend="${product.stockQuantity <= 5} ? 'stock-low' : 'stock-ok'">
-                        
+                    <div class="stock-detail"
+                         th:classappend="${product.stockQuantity == 0} ? 'stock-out' : (${product.stockQuantity <= 5} ? 'stock-low' : 'stock-ok')">
+
                         <th:block th:if="${product.stockQuantity > 0}">
                             <i class="fa-solid fa-boxes-stacked me-2"></i>
                             Còn hàng: <span th:text="${product.stockQuantity}" class="fw-bolder"></span> sản phẩm
-                            <span th:if="${product.stockQuantity <= 5}" class="ms-2">(Sắp hết hàng!)</span>
+                            <span th:if="${product.stockQuantity <= 5}" class="ms-2 fw-bold">(Chỉ còn vài sản phẩm!)</span>
                         </th:block>
-                        
+
                         <th:block th:unless="${product.stockQuantity > 0}">
-                            <i class="fa-solid fa-circle-xmark me-2"></i> 
-                            Hết hàng (Tạm thời không đặt được)
+                            <i class="fa-solid fa-circle-xmark me-2"></i>
+                            Hết hàng
+                            <span class="fw-bold ms-2">(Tạm thời không đặt được)</span>
                         </th:block>
                     </div>
                     <div class="mt-5 d-grid">
@@ -104,32 +188,118 @@
                                 <i class="fa-solid fa-cart-plus me-2"></i> Đăng nhập để thêm vào giỏ hàng
                             </a>
                         </th:block>
-
-                        <th:block th:unless="${user==null}">
-                            <a th:href="@{'/user/addCart?pid='+${product.id}+'&uid='+${user.id}}" class="btn btn-accent-red btn-lg">
-                                <i class="fa-solid fa-cart-plus me-2"></i> Thêm vào giỏ hàng
-                            </a>
+                        <th:block th:unless="${user==null}" >
+                            <th:block th:if="${product.stockQuantity > 0}">
+                                <a th:href="@{'/user/addCart?pid='+${product.id}+'&uid='+${user.id}}"
+                                   class="btn btn-accent-red btn-lg">
+                                    <i class="fa-solid fa-cart-plus me-2"></i> Thêm vào giỏ hàng
+                                </a>
+                            </th:block>
+                            <th:block th:unless="${product.stockQuantity > 0}">
+                                <button class="btn btn-secondary btn-lg" disabled>
+                                    <i class="fa-solid fa-ban me-2"></i> Sản phẩm hiện tại không còn hàng
+                                </button>
+                            </th:block>
                         </th:block>
                     </div>
+
                 </div>
             </div>
         </div>
     </div>
 
+    <div class="container">
+        <div class="col-md-10 offset-md-1">
+            <div class="comment-section">
+                <h4 class="mb-4">Bình luận (<span th:text="${totalComments}">0</span>)</h4>
+
+                <th:block th:if="${user != null}">
+                    <div class="comment-form">
+                        <form th:action="@{/user/addComment}" method="post">
+                            <input type="hidden" name="productId" th:value="${product.id}">
+                            <div class="mb-3">
+                                <textarea class="form-control" name="content" rows="3"
+                                          placeholder="Viết bình luận của bạn..." required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Đăng bình luận</button>
+                        </form>
+                    </div>
+                </th:block>
+
+                <th:block th:if="${user == null}">
+                    <div class="alert alert-info">
+                        Vui lòng <a href="/signin" class="alert-link">Đăng nhập</a> để bình luận.
+                    </div>
+                </th:block>
+
+                <div class="comments-list">
+                    <th:block th:if="${#lists.isEmpty(comments)}">
+                        <p class="text-center text-muted fst-italic">Chưa có bình luận nào. Hãy là người đầu tiên bình luận!</p>
+                    </th:block>
+
+                    <th:block th:each="comment : ${comments}">
+                        <div class="comment-item">
+
+                            <div class="comment-body">
+                                <div class="comment-header">
+                                    <div>
+                                        <span class="comment-author" th:text="${comment.user.name}">Người dùng</span>
+                                        <span class="comment-date"
+                                              th:text="${#temporals.format(comment.createdAt, 'dd MMM yyyy HH:mm')}">Ngày</span>
+                                    </div>
+                                    <th:block th:if="${user != null && user.id == comment.user.id}">
+                                        <form th:action="@{'/user/deleteComment/' + ${comment.id}}" method="post"
+                                              style="display: inline;"
+                                              onsubmit="return confirm('Bạn có chắc chắn muốn xóa bình luận này không?');">
+                                            <input type="hidden" name="productId" th:value="${product.id}">
+                                            <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </th:block>
+                                </div>
+                                <div class="comment-content" th:text="${comment.content}">Nội dung bình luận</div>
+                            </div>
+                        </div>
+                    </th:block>
+                </div>
+
+                <th:block th:if="${totalPages > 1}">
+                    <nav aria-label="Comment pagination">
+                        <ul class="pagination justify-content-center mt-4">
+                            <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                                <a class="page-link" th:href="@{/viewProduct/{id}(id=${product.id}, pageNo=${currentPage - 1})}">Trước</a>
+                            </li>
+
+                            <th:block th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+                                <li class="page-item" th:classappend="${currentPage == i} ? 'active'">
+                                    <a class="page-link" th:href="@{/viewProduct/{id}(id=${product.id}, pageNo=${i})}" th:text="${i + 1}">1</a>
+                                </li>
+                            </th:block>
+
+                            <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                                <a class="page-link" th:href="@{/viewProduct/{id}(id=${product.id}, pageNo=${currentPage + 1})}">Sau</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </th:block>
+            </div>
+        </div>
+    </div>
     <script>
-		document.addEventListener("DOMContentLoaded", function() {
-			const errorPopup = document.getElementById("errorPopup");
-			if (errorPopup) {
-				Swal.fire({
-				icon: "error",
-				title: "",
-				text: errorPopup.textContent.trim(),
-				confirmButtonText: "OK"
-			});
-			}
-		});
-	</script>
-	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const errorPopup = document.getElementById("errorPopup");
+            if (errorPopup) {
+                Swal.fire({
+                    icon: "error",
+                    title: "",
+                    text: errorPopup.textContent.trim(),
+                    confirmButtonText: "OK"
+                });
+            }
+        });
+    </script>
+    <script src="https://cdn.jsdelivr/npm/sweetalert2@11"></script>
 
 </section>
 </body>

@@ -92,6 +92,19 @@
 								</div>
 
 								<div class="mb-3 col-md-6">
+									<label for="stock" class="form-label fw-bold">
+										<i class="bi bi-archive me-2"></i>Số Lượng Trong Kho
+									</label>
+									<div class="input-group">
+										<input type="number" id="stock" name="stockQuantity"
+											   class="form-control" th:value="${product.stockQuantity}" required min="0">
+										<span class="input-group-text">Sản phẩm</span>
+									</div>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="mb-3 col-md-6">
 									<label for="discountPrice" class="form-label fw-bold">
 										<i class="bi bi-coin me-2"></i>Giá Sau Giảm
 									</label>
