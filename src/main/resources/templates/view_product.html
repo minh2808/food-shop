@@ -21,7 +21,43 @@
             border-left: 5px solid #FF0000;
         }
         /* Style cho khối tồn kho chi tiết */
-        
+
+        .comment-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        .comment-item {
+            background: white;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .comment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .comment-author {
+            font-weight: bold;
+            color: #007bff;
+        }
+        .comment-date {
+            font-size: 0.85rem;
+            color: #6c757d;
+        }
+        .comment-content {
+            line-height: 1.6;
+        }
+        .comment-form {
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
     </style>
     <meta charset="UTF-8">
 </head>
@@ -105,15 +141,101 @@
                             </a>
                         </th:block>
 
-                        <th:block th:unless="${user==null}">
-                            <a th:href="@{'/user/addCart?pid='+${product.id}+'&uid='+${user.id}}" class="btn btn-accent-red btn-lg">
-                                <i class="fa-solid fa-cart-plus me-2"></i> Thêm vào giỏ hàng
-                            </a>
+                        <th:block th:unless="${user==null}" >
+                            <!-- Kiểm tra còn hàng -->
+                            <th:block th:if="${product.stockQuantity > 0}">
+                                <a th:href="@{'/user/addCart?pid='+${product.id}+'&uid='+${user.id}}"
+                                   class="btn btn-accent-red btn-lg">
+                                    <i class="fa-solid fa-cart-plus me-2"></i> Thêm vào giỏ hàng
+                                </a>
+                            </th:block>
+
+                            <!-- Hết hàng - Hiển thị nút disabled -->
+                            <th:block th:unless="${product.stockQuantity > 0}">
+                                <button class="btn btn-secondary btn-lg" disabled>
+                                    <i class="fa-solid fa-ban me-2"></i> Sản phẩm hiện tại không còn hàng
+                                </button>
+                            </th:block>
                         </th:block>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+
+    <!-- Comment Section -->
+    <div class="comment-section">
+        <h4 class="mb-4">Comments (<span th:text="${totalComments}">0</span>)</h4>
+
+        <!-- Comment Form -->
+        <th:block th:if="${user != null}">
+            <div class="comment-form">
+                <form th:action="@{/user/addComment}" method="post">
+                    <input type="hidden" name="productId" th:value="${product.id}">
+                    <div class="mb-3">
+									<textarea class="form-control" name="content" rows="3"
+                                              placeholder="Write your comment..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Post Comment</button>
+                </form>
+            </div>
+        </th:block>
+
+        <th:block th:if="${user == null}">
+            <div class="alert alert-info">
+                <a href="/signin">Login</a> to post a comment
+            </div>
+        </th:block>
+
+        <!-- Comments List -->
+        <div class="comments-list">
+            <th:block th:if="${#lists.isEmpty(comments)}">
+                <p class="text-center text-muted">No comments yet. Be the first to comment!</p>
+            </th:block>
+
+            <th:block th:each="comment : ${comments}">
+                <div class="comment-item">
+                    <div class="comment-header">
+                        <div>
+                            <span class="comment-author" th:text="${comment.user.name}">User</span>
+                            <span class="comment-date" th:text="${#temporals.format(comment.createdAt, 'dd MMM yyyy HH:mm')}">Date</span>
+                        </div>
+                        <th:block th:if="${user != null && user.id == comment.user.id}">
+                            <form th:action="@{'/user/deleteComment/' + ${comment.id}}" method="post"
+                                  style="display: inline;"
+                                  onsubmit="return confirm('Are you sure you want to delete this comment?');">
+                                <input type="hidden" name="productId" th:value="${product.id}">
+                                <button type="submit" class="btn btn-sm btn-outline-danger">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </form>
+                        </th:block>
+                    </div>
+                    <div class="comment-content" th:text="${comment.content}">Comment text</div>
+                </div>
+            </th:block>
+        </div>
+
+        <!-- Pagination -->
+        <th:block th:if="${totalPages > 1}">
+            <nav aria-label="Comment pagination">
+                <ul class="pagination justify-content-center mt-4">
+                    <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                        <a class="page-link" th:href="@{/viewProduct/{id}(id=${product.id}, pageNo=${currentPage - 1})}">Previous</a>
+                    </li>
+
+                    <th:block th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+                        <li class="page-item" th:classappend="${currentPage == i} ? 'active'">
+                            <a class="page-link" th:href="@{/viewProduct/{id}(id=${product.id}, pageNo=${i})}" th:text="${i + 1}">1</a>
+                        </li>
+                    </th:block>
+
+                    <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                        <a class="page-link" th:href="@{/viewProduct/{id}(id=${product.id}, pageNo=${currentPage + 1})}">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        </th:block>
     </div>
 
     <script>

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.data.domain.Page;
 
 import com.ecom.exception.ResourceNotFoundException;
 import com.ecom.exception.InsufficientStockException;
@@ -22,6 +23,8 @@ import com.ecom.exception.InsufficientStockException;
 import com.ecom.model.Category;
 import com.ecom.model.Product;
 import com.ecom.model.UserDtls;
+import com.ecom.model.Comment;
+import com.ecom.service.CommentService;
 import com.ecom.service.CartService;
 import com.ecom.service.CategoryService;
 import com.ecom.service.ProductService;
@@ -48,6 +51,9 @@ public class HomeController {
 	
 	@Autowired
 	private CartService cartService;
+
+    @Autowired
+    private CommentService commentService;
 	
 //	@Autowired
 //	private CommonUtil commonUtil;
@@ -113,16 +119,76 @@ public class HomeController {
 		return "product";
 
 	}
-	    
-	
-	
-	@GetMapping("/viewProduct/{id}")
-	public String product(@PathVariable int id, Model m) {
-		Product productById = productService.getProductById(id);
-		m.addAttribute("product", productById);
-		System.out.println(productById.getImage());
-		return "view_product";
-	}
+
+
+
+    @GetMapping("/viewProduct/{id}")
+    public String product(@PathVariable int id,@RequestParam(defaultValue="0") Integer pageNo , Model m) {
+        Product productById = productService.getProductById(id);
+        m.addAttribute("product", productById);
+
+        Page<Comment> comments = commentService.getCommentsByProduct(id, pageNo, 5);
+        m.addAttribute("comments",comments.getContent());
+        m.addAttribute("currentPage", pageNo);
+        m.addAttribute("totalPages",comments.getTotalPages());
+        m.addAttribute("totalComment", comments.getTotalElements());
+        return "view_product";
+    }
+
+    @PostMapping("user/addComment")
+    public String addComment(@RequestParam Integer productId,
+                             @RequestParam String content,
+                             Principal p,
+                             HttpSession session){
+        if( p == null){
+            session.setAttribute("errorMsg", "Please login to comment");
+            return "redirect:/signin";
+        }
+        UserDtls user = userService.getUserByEmail(p.getName());
+        Product product = productService.getProductById(productId);
+
+        if(product == null){
+            session.setAttribute("errorMsg", "Product not found");
+            return "redirect:/viewProduct/"+productId;
+        }
+        Comment comment = new Comment();
+        comment.setProduct(product);
+        comment.setUser(user);
+        comment.setContent(content);
+
+        Comment savedComment = commentService.saveComment(comment);
+        if(savedComment != null){
+            session.setAttribute("succMsg", "Comment added successfully");
+        }
+        else{
+            session.setAttribute("errorMsg", "Failed to add comment");
+        }
+
+
+        return "redirect:/viewProduct/"+productId;
+    }
+
+
+    @PostMapping("/user/deleteComment/{id}")
+    public String deleteComment(@PathVariable Integer id,
+                                @RequestParam Integer productId,
+                                Principal p,
+                                HttpSession session){
+        if(p == null){
+            session.setAttribute("errorMsg", "Please login");
+            return "redirect:/signin";
+        }
+        UserDtls user = userService.getUserByEmail(p.getName());
+        Boolean deleted = commentService.deleteComment(id, user.getId());
+
+        if(deleted){
+            session.setAttribute("succMsg", "Comment deleted successfully");
+        }
+        else{
+            session.setAttribute("errorMsg", "Cannot delete message");
+        }
+        return "redirect:/viewProduct/"+productId;
+    }
 	
 	
 	
