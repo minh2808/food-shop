@@ -135,8 +135,6 @@ $orders.validate({
 		},
 		messages:{
 			firstName:{
-
-
 				required:'first required',
 				lettersonly:'invalid name'
 			},
@@ -145,7 +143,7 @@ $orders.validate({
 				lettersonly:'invalid name'
 			},
 			email: {
-				required: 'email name must be required',
+				required: '',
 				space: 'space not allowed',
 				email: 'Invalid email'
 			},

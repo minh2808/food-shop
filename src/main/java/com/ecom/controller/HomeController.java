@@ -141,14 +141,14 @@ public class HomeController {
                              Principal p,
                              HttpSession session){
         if( p == null){
-            session.setAttribute("errorMsg", "Please login to comment");
+            session.setAttribute("errorMsg", "Đăng nhập để bình luận");
             return "redirect:/signin";
         }
         UserDtls user = userService.getUserByEmail(p.getName());
         Product product = productService.getProductById(productId);
 
         if(product == null){
-            session.setAttribute("errorMsg", "Product not found");
+            session.setAttribute("errorMsg", "Không tìm thấy sản phẩm");
             return "redirect:/viewProduct/"+productId;
         }
         Comment comment = new Comment();
@@ -175,17 +175,17 @@ public class HomeController {
                                 Principal p,
                                 HttpSession session){
         if(p == null){
-            session.setAttribute("errorMsg", "Please login");
+            session.setAttribute("errorMsg", "Hãy đăng nhập");
             return "redirect:/signin";
         }
         UserDtls user = userService.getUserByEmail(p.getName());
         Boolean deleted = commentService.deleteComment(id, user.getId());
 
         if(deleted){
-            session.setAttribute("succMsg", "Comment deleted successfully");
+            session.setAttribute("succMsg", "Xóa bình luận thành công");
         }
         else{
-            session.setAttribute("errorMsg", "Cannot delete message");
+            session.setAttribute("errorMsg", "Không thể xóa bình luận");
         }
         return "redirect:/viewProduct/"+productId;
     }

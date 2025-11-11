@@ -79,18 +79,18 @@ public class UserController {
         try {
             Cart saveCart = cartService.saveCart(pid, uid);
             if (!ObjectUtils.isEmpty(saveCart)) {
-                session.setAttribute("success", "Sản phẩm đã được thêm vào giỏ hàng");
+                session.setAttribute("succMsg", "Sản phẩm đã được thêm vào giỏ hàng");
                 return "redirect:/user/cart";   
             }
 
         } catch (ResourceNotFoundException e) {
-            session.setAttribute("error", "Không tìm thấy sản phẩm hoặc người dùng");
+            session.setAttribute("errorMsg", "Không tìm thấy sản phẩm hoặc người dùng");
 
         } catch (InsufficientStockException e) {
-            session.setAttribute("error", "Trong kho không đủ sản phẩm, không thể đặt");
+            session.setAttribute("errorMsg", "Trong kho không đủ sản phẩm, không thể đặt");
 
         } catch (Exception e) {
-            session.setAttribute("error", "Đã xảy ra lỗi hệ thống không mong muốn.");
+            session.setAttribute("errorMsg", "Đã xảy ra lỗi hệ thống không mong muốn.");
         }
         return "redirect:/viewProduct/" + pid;         // Đặt hàng không thành chuyển về trang sản phẩm
     }
@@ -104,15 +104,15 @@ public class UserController {
                 m.addAttribute("product", productById);
             } catch (ResourceNotFoundException e) {
                 // CHUYỂN SANG DÙNG FLASH ATTRIBUTES và REDIRECT
-                redirectAttributes.addFlashAttribute("error", "Lỗi: Không tìm thấy sản phẩm này!");
+                redirectAttributes.addFlashAttribute("errorMsg", "Lỗi: Không tìm thấy sản phẩm này!");
                 return "redirect:/products"; // Chuyển hướng về trang danh sách sản phẩm
                 
             } catch (InsufficientStockException e) {
-                redirectAttributes.addFlashAttribute("error", "Lỗi: Trong kho không đủ sản phẩm.");
+                redirectAttributes.addFlashAttribute("errorMsg", "Lỗi: Trong kho không đủ sản phẩm.");
                 return "redirect:/products"; 
                 
             } catch (Exception e) {
-                redirectAttributes.addFlashAttribute("error", "Đã xảy ra lỗi hệ thống không mong muốn.");
+                redirectAttributes.addFlashAttribute("errorMsg", "Đã xảy ra lỗi hệ thống không mong muốn.");
                 return "redirect:/products";
             }
             return "view_product";
@@ -136,10 +136,10 @@ public class UserController {
             return "/user/cart";
 
         } catch (ResourceNotFoundException e) {
-            session.setAttribute("error", "Lỗi: " + e.getMessage());
+            session.setAttribute("errorMsg", "Lỗi: " + e.getMessage());
             return "redirect:/user/";
         } catch (Exception e) {
-            session.setAttribute("error", "Đã xảy ra lỗi không mong muốn khi tải giỏ hàng.");
+            session.setAttribute("errorMsg", "Đã xảy ra lỗi không mong muốn khi tải giỏ hàng.");
             return "redirect:/user/";
         }
     }
@@ -157,31 +157,31 @@ public class UserController {
             if ("set".equalsIgnoreCase(sy) && newQuantity != null) {
                 // Cập nhật trực tiếp từ ô nhập liệu (sy=set)
                 cartService.updateQuantityByInput(cid, newQuantity);
-                redirectAttributes.addFlashAttribute("success", "Cập nhật số lượng thành công!");
+                redirectAttributes.addFlashAttribute("succMsg", "Cập nhật số lượng thành công!");
             
             } else if ("in".equalsIgnoreCase(sy) || "de".equalsIgnoreCase(sy)) {
                  // Cập nhật tăng/giảm (từ nút + / -)
                  cartService.updateQuantity(sy, cid);
-                 redirectAttributes.addFlashAttribute("success", "Cập nhật giỏ hàng thành công!");
+                 redirectAttributes.addFlashAttribute("succMsg", "Cập nhật giỏ hàng thành công!");
 
             } else {
                  // Nhập sai
                  if (newQuantity != null) {
                     cartService.updateQuantityByInput(cid, newQuantity);
-                    redirectAttributes.addFlashAttribute("success", "Cập nhật số lượng thành công!");
+                    redirectAttributes.addFlashAttribute("succMsg", "Cập nhật số lượng thành công!");
                  } else {
-                    redirectAttributes.addFlashAttribute("error", "Nhập lại.");
+                    redirectAttributes.addFlashAttribute("errorMsg", "Nhập lại.");
                  }
             }
             
         } catch (InsufficientStockException e) {
-            redirectAttributes.addFlashAttribute("error", "Lỗi tồn kho: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("errorMsg", "Lỗi tồn kho: " + e.getMessage());
         } catch (ResourceNotFoundException e) {
-            redirectAttributes.addFlashAttribute("error", "Lỗi: Không tìm thấy giỏ hàng.");
+            redirectAttributes.addFlashAttribute("errorMsg", "Lỗi: Không tìm thấy giỏ hàng.");
         } catch (IllegalArgumentException e) {
-            redirectAttributes.addFlashAttribute("error", "Lỗi: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("errorMsg", "Lỗi: " + e.getMessage());
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Đã xảy ra lỗi không mong muốn khi cập nhật giỏ hàng.");
+            redirectAttributes.addFlashAttribute("errorMsg", "Đã xảy ra lỗi không mong muốn khi cập nhật giỏ hàng.");
         }
 
         return "redirect:/user/cart";
@@ -214,11 +214,11 @@ public class UserController {
             return "/user/order";
 
         } catch (ResourceNotFoundException e) {
-            session.setAttribute("error", "Lỗi: Người dùng không tồn tại hoặc tài nguyên liên quan không tìm thấy.");
+            session.setAttribute("errorMsg", "Lỗi: Người dùng không tồn tại hoặc tài nguyên liên quan không tìm thấy.");
             return "redirect:/user/";
 
         } catch (Exception e) {
-            session.setAttribute("error", "Đã xảy ra lỗi không mong muốn khi tải trang đặt hàng.");
+            session.setAttribute("errorMsg", "Đã xảy ra lỗi không mong muốn khi tải trang đặt hàng.");
             return "redirect:/user/cart";
         }
     }
@@ -233,12 +233,12 @@ public class UserController {
             return "redirect:/user/success";
 
         } catch (ResourceNotFoundException | InsufficientStockException e) {
-            redirectAttributes.addFlashAttribute("error", "Lỗi đặt hàng: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("errorMsg", "Lỗi đặt hàng: " + e.getMessage());
             return "redirect:/user/orders";
 
         } catch (Exception e) {
             // include exception message to help debug transaction errors
-            redirectAttributes.addFlashAttribute("error", "Lỗi giao dịch không mong muốn: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("errorMsg", "Lỗi giao dịch không mong muốn: " + e.getMessage());
             return "redirect:/user/orders";
         }
     }
@@ -258,11 +258,11 @@ public class UserController {
             return "/user/my_orders";
 
         } catch (ResourceNotFoundException e) {
-            session.setAttribute("error", "Lỗi truy cập: Tài khoản không hợp lệ.");
+            session.setAttribute("errorMsg", "Lỗi truy cập: Tài khoản không hợp lệ.");
             return "redirect:/user/";
 
         } catch (Exception e) {
-            session.setAttribute("error", "Đã xảy ra lỗi khi tải lịch sử đơn hàng.");
+            session.setAttribute("errorMsg", "Đã xảy ra lỗi khi tải lịch sử đơn hàng.");
             return "redirect:/user/";
         }
     }
@@ -286,21 +286,21 @@ public class UserController {
             // If cancelling, restore stock and delete the order
             if (OrderStatus.CANCEL.getName().equals(status)) {
                 orderService.cancelOrder(id);
-                session.setAttribute("success", "Đã hủy đơn hàng và hoàn trả kho.");
+                session.setAttribute("succMsg", "Đã hủy đơn hàng và hoàn trả kho.");
             } else {
                 ProductOrder updateOrder = orderService.updateOrderStatus(id, status);
                 if (!ObjectUtils.isEmpty(updateOrder)) {
-                    session.setAttribute("success", "Cập nhật thành công");
+                    session.setAttribute("succMsg", "Cập nhật thành công");
                 } else {
-                    session.setAttribute("error", "Cập nhật thất bại. Đơn hàng không tìm thấy hoặc lỗi nội bộ.");
+                    session.setAttribute("errorMsg", "Cập nhật thất bại. Đơn hàng không tìm thấy hoặc lỗi nội bộ.");
                 }
             }
 
         } catch (ResourceNotFoundException e) {
-            session.setAttribute("error", "Lỗi: Không tìm thấy đơn hàng cần cập nhật.");
+            session.setAttribute("errorMsg", "Lỗi: Không tìm thấy đơn hàng cần cập nhật.");
 
         } catch (Exception e) {
-            session.setAttribute("error", "Lỗi hệ thống khi cập nhật trạng thái.");
+            session.setAttribute("errorMsg", "Lỗi hệ thống khi cập nhật trạng thái.");
         }
 
         return "redirect:/user/user-orders";
@@ -311,11 +311,11 @@ public class UserController {
     public String removeCart(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
         try {
             cartService.removeCartItem(id);
-            redirectAttributes.addFlashAttribute("success", "Đã xóa mục khỏi giỏ hàng thành công!");
+            redirectAttributes.addFlashAttribute("succMsg", "Đã xóa mục khỏi giỏ hàng thành công!");
         } catch (ResourceNotFoundException e) {
-            redirectAttributes.addFlashAttribute("error", "Lỗi: Không tìm thấy mục cần xóa.");
+            redirectAttributes.addFlashAttribute("errorMsg", "Lỗi: Không tìm thấy mục cần xóa.");
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Đã xảy ra lỗi khi xóa mục giỏ hàng.");
+            redirectAttributes.addFlashAttribute("errorMsg", "Đã xảy ra lỗi khi xóa mục giỏ hàng.");
         }
         return "redirect:/user/cart";
     }

@@ -120,7 +120,7 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public List<Product> searchProduct(String ch) {
-		if (ch == null || ch.trim().isEmpty()) {
+		 if (ch == null || ch.trim().isEmpty()) {
         	return new ArrayList<>();
     	}
 		return productRepository.findByTitleContainingIgnoreCaseOrCategoryContainingIgnoreCase(ch, ch);
