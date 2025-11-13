@@ -145,7 +145,6 @@ public class UserController {
     }
 
 
-    // THAY THẾ PHƯƠNG THỨC CART QUANTITY UPDATE
     @GetMapping("/cartQuantityUpdate")
     public String updateCartQuantity(
             @RequestParam(required = false) String sy,           // sy: de, in, hoặc set
@@ -187,6 +186,19 @@ public class UserController {
         return "redirect:/user/cart";
     }
 
+    // Xóa thư mục
+    @GetMapping("/removeCart/{id}")
+    public String removeCart(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
+        try {
+            cartService.removeCartItem(id);
+            redirectAttributes.addFlashAttribute("succMsg", "Đã xóa mục khỏi giỏ hàng thành công!");
+        } catch (ResourceNotFoundException e) {
+            redirectAttributes.addFlashAttribute("errorMsg", "Lỗi: Không tìm thấy mục cần xóa.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMsg", "Đã xảy ra lỗi khi xóa mục giỏ hàng.");
+        }
+        return "redirect:/user/cart";
+    }
 
     private UserDtls getLoggedInUserDetails(Principal p) {
         String email = p.getName();
@@ -306,17 +318,5 @@ public class UserController {
         return "redirect:/user/user-orders";
     }
 
-    // Xóa thư mục
-    @GetMapping("/removeCart/{id}")
-    public String removeCart(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
-        try {
-            cartService.removeCartItem(id);
-            redirectAttributes.addFlashAttribute("succMsg", "Đã xóa mục khỏi giỏ hàng thành công!");
-        } catch (ResourceNotFoundException e) {
-            redirectAttributes.addFlashAttribute("errorMsg", "Lỗi: Không tìm thấy mục cần xóa.");
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorMsg", "Đã xảy ra lỗi khi xóa mục giỏ hàng.");
-        }
-        return "redirect:/user/cart";
-    }
+
 }

@@ -158,10 +158,10 @@ public class HomeController {
 
         Comment savedComment = commentService.saveComment(comment);
         if(savedComment != null){
-            session.setAttribute("succMsg", "Comment added successfully");
+            session.setAttribute("succMsg", "Thêm bình luận thành công");
         }
         else{
-            session.setAttribute("errorMsg", "Failed to add comment");
+            session.setAttribute("errorMsg", "Không thể thêm bình luận");
         }
 
 
