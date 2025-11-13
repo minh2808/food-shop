@@ -79,7 +79,7 @@ public class UserController {
         try {
             Cart saveCart = cartService.saveCart(pid, uid);
             if (!ObjectUtils.isEmpty(saveCart)) {
-                session.setAttribute("succMsg", "Sản phẩm đã được thêm vào giỏ hàng");
+                session.setAttribute("succMsg", "Sản phẩm được thêm vào giỏ hàng thành công");
                 return "redirect:/user/cart";   
             }
 

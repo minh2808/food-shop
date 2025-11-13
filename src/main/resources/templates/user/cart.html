@@ -11,12 +11,12 @@
 <body>
 	<section>
 		<!-- Hi?n popup khi c� l?i -->
-		<div th:if="${error}" class="alert alert-danger" id="errorPopup" style="display:none;">
-			[[${error}]]
+		<div th:if="${errorMsg}" class="alert alert-danger" id="errorPopup" style="display:none;" >
+			[[${errorMsg}]]
 		</div>
 
-		<div th:if="${success}" class="alert alert-success" id="successPopup" style="display:none;">
-			[[${success}]]
+		<div th:if="${succMsg}" class="alert alert-success" id="successPopup" style="display:none;" >
+			[[${succMsg}]]
 		</div>
 
 
